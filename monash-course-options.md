@@ -166,6 +166,141 @@ something you do occasionally rather than a career, and if you later want to lea
 need a PhD on top, which is a further 3–4 years. This is the right choice if practice is the goal and
 research is an interest rather than a vocation.
 
+## 4585 vs 4586: these are not interchangeable
+
+A clinical doctorate does not make you "a clinical psychologist" generically. The Psychology Board of
+Australia recognises **nine** areas of practice endorsement, and clinical psychology and clinical
+neuropsychology are two separate ones. The titles are protected under the National Law: "A person who
+does not have an endorsement for clinical psychology must not use the title 'clinical psychologist'
+or any other title that may lead the public to believe that the person holds such an endorsement."
+Unlawful use can attract fines and disciplinary action.
+
+So:
+
+| | 4585 | 4586 |
+| --- | --- | --- |
+| PhD | Yes | Yes |
+| General registration as a psychologist | Yes | Yes |
+| Endorsement | Clinical **psychology** | Clinical **neuropsychology** |
+| Protected title you may use | Clinical psychologist | Clinical neuropsychologist |
+
+Both make you a researcher and a registered psychologist. **Only 4585 makes you a clinical
+psychologist.** 4586 makes you a clinical neuropsychologist, which is a different specialty with
+different work.
+
+The registrar program must be in the same area of practice as your qualification, so you cannot do
+4586 and then claim a clinical psychology endorsement. You *can* add a second endorsement later
+through a bridging program — PsyBA lists a subsequent AoPE bridging program at 66 weeks and 2,250
+hours — but that is a further multi-year commitment, not a formality.
+
+**Practical differences worth weighing:**
+
+- **Medicare.** The higher Better Access rebate tier is restricted to practitioners who hold general
+  registration *and* are "endorsed by the Psychology Board of Australia to practice in clinical
+  psychology" (MBS explanatory note MN.6.2). A clinical neuropsychologist without that specific
+  endorsement bills at the registered psychologist tier for those items, which is a materially lower
+  rebate. If private therapy practice is part of your plan, this favours 4585.
+- **Type of work.** Clinical psychology is assessment, diagnosis, formulation and psychological
+  therapy for emotional and behavioural disorders. Clinical neuropsychology is cognitive and
+  neuropsychological assessment and rehabilitation — brain injury, neurology, dementia, ageing,
+  neurodevelopmental and psychiatric populations. 4586's placements are described as "child and
+  adolescent, acute neurology, geriatric, psychiatric and rehabilitation settings". Neuropsychology
+  income tends to come from assessment in hospital, medico-legal, insurance and NDIS contexts rather
+  than Better Access therapy.
+- **Fit with your research interest.** App-based cognitive and neurocognitive assessment for
+  addiction and compulsivity is neuropsychology's subject matter. 4586 aligns your licence with your
+  research. 4585 aligns your licence with therapy delivery, and would suit you better if you want to
+  research and deliver *treatments*.
+
+That is the real choice between them: not which one is better, but whether you want to spend your
+clinical life doing cognitive assessment or doing therapy.
+
+## Full-time enrolment and the scholarship requirement for the clinical doctorates
+
+Monash advises that the School does not admit full-time clinical doctorate candidates without a
+scholarship, on duty-of-care grounds, and describes the load as five days a week. Here is how that
+squares with the written rules.
+
+**The five-day figure is not the policy definition.** The *Graduate Research Enrolment Procedure*,
+clause 1.7, defines full-time as "the equivalent of at least four days each week", and the *RTP
+Scholarship Procedure* (4.28.2, 4.29) permits paid employment. Historically the MNHS handbook for
+the predecessor DPsych was explicit: full-time candidates could do "no more than 15 hours of work
+per week on average" with "a maximum of six hours only on average ... during normal working hours".
+
+**But the practical claim is sound for these two courses specifically.** 4586 is coursework 10%,
+placements 20%, thesis 70%, with a minimum of 1,000 supervised placement hours in hospital and
+community services that operate in business hours. You cannot move a placement to an evening. So
+while the policy floor is four days, the actual timetable of a clinical doctorate leaves effectively
+no room for employment — which is exactly the duty-of-care argument. This reasoning does *not* transfer
+to 0047, where there are no placements and no fixed timetable.
+
+**Part-time is not available at entry anyway.** Both clinical doctorates specify that "the first two
+years must be undertaken full time. From third year, domestic students may elect to complete their
+studies on either a full time or part time basis." So for 4585/4586 there is no part-time entry to
+negotiate. The first two years are full-time or nothing.
+
+**Consequence:** for the clinical doctorates, a stipend is effectively an admission requirement, not
+a bonus. Admission and funding are decided together — the School's own timeline refers to being
+"considered for a course and scholarship offer" as a single thing, and requires final results by
+16 November 2026 for domestic applicants in the current cycle.
+
+**The hopeful part, and it is worth pursuing.** Selection for these two programs is run by the School
+through its own process — video statement, three referee reports, interview — not purely by
+university-wide academic ranking. It is therefore worth asking directly whether clinical doctoral
+applicants are ranked for RTP stipends **within the clinical cohort** or against the general graduate
+research pool. If the former, the generic "WAM 80+" line may not be the operative bar for these
+programs, and interview performance, referee reports and demonstrated clinical aptitude may carry
+much more weight than they would in the central round. This is the single most valuable question to
+put to `psych-gradresearch-enquiries@monash.edu`.
+
+## Timing: is February 2028 unavoidable?
+
+**For 4585/4586, yes, almost certainly.** February 2027 fails for one reason only, and it is not
+academic:
+
+- Your GDPA results would arrive in time — the domestic cycle needs final results by 16 November
+  2026 and you finish in October.
+- The international deadline for February 2027 (31 July 2026) has passed.
+- The domestic deadline for February 2027 is 15 September 2026, and you will not hold PR until
+  around March 2027.
+
+So residency status is the only blocker. Given the domestic deadline is roughly three weeks away,
+there is one question worth asking immediately even though the answer is probably no: whether an
+application can be lodged in the domestic round with PR pending and fee status assessed at
+commencement. If that were possible, February 2027 becomes live. Assume it is not, but ask.
+
+Otherwise the target is the domestic round closing around **mid-September 2027** for a **February
+2028** start.
+
+**For 0047, no.** The research PhD has no February constraint. Admission-only applications can be
+lodged at any time, and the domestic scholarship round R2 closes 31 May 2027 for a July–December
+2027 commencement. If the clinical credential is not essential to you, that is roughly seven months
+earlier.
+
+**Do not start 0047 as a placeholder.** Under the *Graduate Research Admissions Procedure* (2.3–2.5),
+prior candidature in a graduate research course is deducted from the duration of a later one, and
+scholarship duration is reduced by any study already undertaken (*RTP Scholarship Procedure* 4.9).
+Enrolling in a research PhD in mid-2027 and then trying to move to a clinical doctorate in February
+2028 would cost you candidature and scholarship time and complicate both applications. Pick a lane.
+
+## What to do with the next twelve months if the clinical doctorate is the goal
+
+If 4585/4586 is the target, the period from now to September 2027 is not dead time — it is the whole
+game, because a place requires a scholarship and a scholarship requires being competitive.
+
+1. **Maximise the GDPA research project mark.** Highest-leverage number still in your control.
+2. **Get paid research assistant work** in a relevant lab from October 2026. This builds Admissions
+   1.10.3 experience, gets you co-authorship, and gives you referees who have seen you work.
+3. **Convert the GDPA thesis into a conference abstract or paper.** Research output under 1.10.2.
+4. **Get clinically relevant experience.** The video statement asks you to outline "your vision for
+   your career as a clinical psychologist or clinical neuropsychologist". Volunteer or paid work in
+   mental health, disability, or a helpline gives that answer substance instead of aspiration.
+5. **Choose between 4585 and 4586 deliberately** and build the application around it. The video
+   statement makes a hedged answer obvious.
+6. **Cultivate three referees** who can speak to research ability and clinical suitability.
+7. **Ask the cohort-ranking question** above, and ask what the successful applicants' profiles
+   typically look like.
+
 ## Two options you did not list, both worth knowing about
 
 **4586 — PhD (Clinical Neuropsychology).** Structurally identical to 4585, same February-only intake,
@@ -214,11 +349,13 @@ at 70–75. The workable route is **D6008 + the 5+1 internship** for general reg
 years, and if you later want clinical endorsement you can pursue a bridging program. Alternatively
 look at clinical master's programs elsewhere that set entry at a WAM of 70.
 
-**If you want to keep both doors open**, which is where I suspect you actually are: apply for
-**0047** with a strong supervisor and grant-funded project as the primary plan, and put in a 4586 or
-4585 application in the same cycle if a slot allows. Note the constraint from the apply page — one
-application per scholarship round or admission period — so this needs sequencing rather than
-scattergun submission. Under no circumstances let the 4585/4586 lottery be your only plan.
+**If you want to keep both doors open**, note that this means applying to both in the same cycle and
+then choosing between offers — *not* enrolling in one as a hedge. Because prior candidature is
+deducted from a later research degree and reduces scholarship duration, starting 0047 while waiting
+for a clinical doctorate is actively costly. Also note the constraint from the apply page: one
+application per scholarship round or admission period, so this needs sequencing rather than
+scattergun submission. What you should not do is let the 4585/4586 lottery be your only plan, given a
+place there depends on winning a scholarship you cannot control.
 
 One thing to avoid: doing 0047 first and assuming you can add clinical registration cheaply later.
 You cannot. A research PhD earns you no credit toward an accredited professional sequence, so
@@ -243,6 +380,18 @@ are dramatically more efficient than doing the two separately.
 
 1. That the Monash GDPA is accepted as the APAC-accredited fourth year for 0047, 4585, 4586 and
    D6008, and how each computes the entry average.
+1. **Whether clinical doctoral applicants are ranked for stipends within the clinical cohort or
+   against the whole graduate research pool.** This determines whether the WAM 80+ line is the real
+   bar for 4585/4586.
+1. Whether the School's "no full-time admission without a scholarship" position applies only to the
+   clinical doctorates or to graduate research in the School generally, including 0047 — and on what
+   documented basis, given the Enrolment Procedure defines full-time as four days a week and permits
+   paid employment.
+1. Whether a domestic-round application can be lodged with PR pending. Urgent, because the February
+   2027 domestic deadline is about three weeks away.
+1. Whether 4586's registrar requirement is 2,250 hours over 66 weeks (the PsyBA figure for a
+   sixth-year qualification with a doctoral thesis) or the "2 year registrar program" the course page
+   describes.
 2. The exact M6046 entry average and whether there is any discretion below 80%.
 3. Student contribution band and amount for M6046, and whether offers are CSP or full-fee.
 4. Confirmation that 4585/4586 candidates are considered in the ordinary graduate research
