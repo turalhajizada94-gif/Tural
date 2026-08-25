@@ -313,13 +313,122 @@ Your status flips and tuition stops being a problem. Then, in order of preferenc
 - **Part-time, then convert.** Genuinely last resort, and only with a documented intention to
   convert to full-time (4.14, 4.43).
 
+## Family sponsorship of $37,145/yr — where it helps and where it does not
+
+Short answer: it is decisive for **0047**, and probably not decisive for **4585/4586**, for reasons
+that are about places rather than money.
+
+**Why it may not solve the clinical doctorate problem.** The School's "no full-time admission without
+a scholarship" position is not documented university policy, so whether private funding satisfies it
+is a discretionary call I cannot answer from the outside. But there is a structural reason to be
+pessimistic. The School's own language is about being "considered for a **course and scholarship
+offer**" as a single thing, which suggests cohort size is set by the number of funded places. If
+that is right, the scarce good is the place, not the money, and self-funding does not create one.
+
+On top of that, the binding constraint on these two programs is almost certainly clinical placement
+and supervision capacity, not stipends. Each candidate needs a minimum of 1,000 supervised hours
+across three placements in partner health services, under APAC-accredited supervision ratios. You
+cannot buy a placement. And the MNHS Expression of Interest form requires the supervisor to declare
+"sufficient resources, within my control, are available for the proposed project" — a resourcing test
+that is separate from your living costs.
+
+There is also a plain reason a school worried about duty of care might decline a family arrangement:
+it is not enforceable and the University has no mechanism to verify or hold it. A promise from a
+parent can be withdrawn; a scholarship cannot.
+
+**So ask the right question.** Do not ask "will you accept my father's sponsorship". Ask:
+
+> Is admission to 4585/4586 capped by the number of funded stipends, or by placement and supervision
+> capacity? If a place and a supervisor are available, can an externally funded or self-funded
+> candidate be admitted? If so, what form and evidence of financial support does the School require?
+
+That single question separates two very different worlds and tells you whether this route exists at
+all.
+
+**Ask also whether it can be formalised.** The *RTP Scholarship Procedure* states in its scope that
+it "does not apply to externally-funded scholarships" — so externally funded scholarships are a
+recognised category at Monash. It is worth asking whether a privately funded scholarship can be
+established and administered through the University rather than paid to you directly. That converts
+an informal family promise into a documented award with a named funder and a term, which is a far
+stronger answer to a duty-of-care objection than a bank statement.
+
+**Where the sponsorship is genuinely powerful: 0047.** For a research PhD as a domestic student,
+tuition is already $0 under the RTP Fees Offset, there is no placement bottleneck, and the
+duty-of-care reasoning does not apply in the same way because there is no fixed timetable. $37,145/yr
+of family support replicates precisely what the stipend would have provided. That removes funding as
+a barrier entirely, and it changes the plan in `monash-phd-pathway.md` in one important way: you
+would no longer need to *win* the competitive stipend to start. You would only need a supervisor to
+say yes.
+
+Concretely, that makes **domestic Round 2, closing 31 May 2027 for a July–December 2027 start**, a
+realistic full-time commencement that depends on nothing you cannot control. Roughly seven months
+earlier than February 2028, and no lottery.
+
+Two footnotes. If you later win a stipend you can hold both — clause 4.28.3 permits receiving "a
+concurrent stipend(s) to support the recipient's general living costs". And on tax: a genuine gift
+from a family member is generally not assessable income in Australia, unlike a part-time stipend
+which is taxable under 4.20, but get proper advice rather than relying on this.
+
+## Residency status: do not apply as domestic before you hold PR
+
+You asked whether you could apply as domestic now and have PR by the time payment falls due. Two
+things about this.
+
+**First, don't.** The MNHS graduate research application asks you to state citizenship as either
+"Domestic (Australian/New Zealand Citizen or Australian Permanent Resident)" or "International", and
+carries this declaration: "I warrant that the information on this form is correct and complete. I
+acknowledge that the provision of incorrect information or the withholding of relevant information
+relating to my application ... might invalidate my application and that the University may withdraw
+an offer of a place or cancel my enrolment in consequence. Should the University determine that I
+have submitted a false document, I consent to the University disclosing this information to other
+relevant tertiary institutions."
+
+Declaring domestic status you do not hold is not a technicality with a fee consequence. The stated
+outcomes are an invalidated application, a withdrawn offer, cancelled enrolment, and disclosure to
+other universities. Against a plan that spans several years and a professional registration that
+depends on good character, that is an unacceptable risk for a few months' timing gain. The sector
+norm is the same everywhere: you apply as international until PR is actually granted.
+
+**Second, and more usefully: you don't need the workaround.** Work the dates.
+
+- PR expected around **March 2027**.
+- The February 2028 clinical doctorate deadlines will fall around **31 July 2027** (international) and
+  **mid-September 2027** (domestic), based on the current cycle.
+
+March 2027 comes comfortably before both. So by the time you apply for a February 2028 start you will
+already hold PR and will be a genuine domestic applicant. There is nothing to finesse. The only
+intake where the timing gap bites is February 2027, and that one is already closed on the
+international side (deadline 31 July 2026) and needs PR you will not have by 15 September 2026.
+
+**What the mechanism actually is, for completeness.** Fee status does move mid-course, and it is
+well documented. *Graduate Research Enrolment Procedure* 2.10–2.11.1: "Changes to citizenship or
+residency status may affect the fees charged for the applicable enrolment period," and "the date for
+the change in residency status is the visa or citizenship grant date." You notify via the Change of
+Residency Status form, and clause 2.12 of the *RTP Scholarship Procedure* then applies — all domestic
+students receive the RTP Fees Offset. So the legitimate version of your idea does exist: apply
+**truthfully as international**, and if PR is granted before or during candidature, convert and pick
+up the Fees Offset from the grant date.
+
+That is a genuine contingency plan if PR slips past September 2027 — apply in the international round
+for February 2028 and convert on grant. The catch is that as an international applicant you need both
+a stipend *and* a tuition scholarship, which is the harder combination. Also confirm what happens to
+an awarded scholarship on conversion, since clause 2.6 bars holding a University tuition scholarship
+alongside an equivalent Australian Government award.
+
+**Verify:** whether fee status for graduate research admission is assessed at application or at
+commencement, and whether Monash will consider an application on the basis of expected status at
+commencement with evidence of a lodged PR application. I could not confirm either way, and it is
+worth asking before 15 September 2026 in case February 2027 is salvageable.
+
 ## The next three weeks
 
 1. Email Rico Lee to confirm the project's status.
 2. Email Verdejo-García, and Turning Point/MARC, with a one-page EOI.
-3. Email MGRO with the three questions in step 6 — get the answers in writing.
-4. Email `psych-gradresearch-enquiries@monash.edu` about Clinical Neuropsychology if clinical
-   endorsement matters to you, and ask for the 2027 cycle timeline.
+3. Email MGRO with the three questions in step 6, plus the fee-status-timing question — get the
+   answers in writing.
+4. Email `psych-gradresearch-enquiries@monash.edu` about the clinical doctorates: ask the
+   cohort-ranking question, the funded-places-versus-placement-capacity question, and for the 2027
+   cycle timeline.
 5. Push hard on the GDPA research project mark.
 6. Ask your GDPA supervisor about a conference abstract.
 
