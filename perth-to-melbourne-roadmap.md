@@ -216,6 +216,21 @@ Neuropsychologists conference, or an addiction or neuroscience meeting.
 
 ### What a systematic review actually is
 
+**In plain terms.** Say fifty research teams around the world have each tested whether a phone app
+helps people cut down their drinking. Some found it worked, some found it did not. Nobody knows the
+real answer, because nobody has put all fifty studies side by side. A systematic review is you doing
+that. You are not running a new experiment — you are doing a careful, rule-based audit of every
+experiment that already exists, and reporting what they add up to.
+
+The word "systematic" just means you write the rules down before you start and then follow them: which
+databases you will search, what words you will search for, what makes a study eligible. That is the
+only difference between this and an ordinary essay-style literature review, and it is the difference
+between background reading and a publishable study.
+
+You need a laptop, a library login and time. No lab, no patients, no ethics approval, no money.
+
+The rest of this section is the detailed version.
+
 **A systematic review is a study whose data is other studies.** That is the whole idea. Instead of
 recruiting participants, you treat the published literature as your dataset, and you go through it
 with a method so explicit that someone else could repeat your search and get the same set of papers.
