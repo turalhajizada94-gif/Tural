@@ -325,6 +325,65 @@ exactly.
 pitch needs a second screener — usually the academic, a PhD student in the group, or another
 volunteer. Say so upfront; it shows you know the method.
 
+### Finding the second screener
+
+**The ask is smaller than it sounds, and that matters for who will say yes.** Full double screening is
+the gold standard, but it is not the only accepted method. The Cochrane Handbook itself states that
+"it is acceptable that this initial screening of titles and abstracts is undertaken by only one
+person", and AHRQ, Campbell, Cochrane and NICE all treat dual screening as optimal while accepting
+single screening as an alternative. The evidence is that single screening misses a median of about 5%
+of relevant studies — roughly 3% for experienced screeners, 13% for inexperienced ones.
+
+So you have three options to offer, in descending order of rigour:
+
+1. **Full dual screening.** Both people screen everything. Best, and the biggest ask.
+2. **Partial dual screening.** The second person independently screens a random 10–20% subset, you
+   calculate the agreement between you (Cohen's kappa, with 0.60 usually treated as the minimum
+   acceptable and above 0.80 as good), report it, and you screen the remainder alone. This is common
+   practice and turns a 150-hour request into a 15–30 hour one.
+3. **Single screening of titles and abstracts, dual screening at full text.** The volume at full text
+   is far smaller — perhaps a hundred papers rather than three thousand — so this is very manageable
+   and is defensible with a Cochrane citation.
+
+Offering this as a menu rather than a demand is what gets you a yes.
+
+**Where to find the person, in order:**
+
+1. **Ask your supervising academic to supply one.** This is the main answer — you mostly do not find
+   the second screener, you ask for one. Phrase it as a question rather than a request: "would you or
+   someone in your group be able to second-screen, or should I find someone?"
+2. **A PhD student or postdoc in the same group.** The most common real-world answer. Middle
+   authorship is the payment, and 20–30 hours for a co-authored paper is a good trade for someone
+   building their own publication list.
+3. **A peer swap with another GDPA, honours or masters graduate.** You second-screen their review,
+   they second-screen yours, and you each pick up a middle authorship on the other's paper. Your own
+   GDPA cohort is full of people in exactly your position who also need research output and have no
+   lab access. This costs nothing and is badly underused.
+4. **A collaborator at another institution.** Systematic reviews routinely carry four to six authors
+   across universities. If your supervisor knows someone with topic expertise, they are often happy
+   to join for modest work in exchange for authorship. Dr Rico Lee at Melbourne is an example worth
+   considering given his work on digital cognitive assessment.
+5. **A research librarian** — for the search strategy rather than screening, but Monash librarians do
+   sometimes co-author systematic reviews and their methodological help is genuinely valuable. Ask
+   regardless.
+6. **Structured student research programs**, such as Turning Point's Student Addiction Researchers
+   program, where you meet people in the same position.
+
+**How to ask so that people say yes.** Be specific and bounded. "Would you help with a systematic
+review?" is open-ended and gets ignored. "Would you independently screen about 600 abstracts in
+Covidence over three weeks, roughly 15 hours, for second authorship?" is a decision someone can
+actually make.
+
+**Get authorship order agreed in writing at the start.** Authorship disputes are the most common way
+these collaborations go wrong, and they are entirely avoidable with one email confirming who is
+first, who is middle and who is last before any work begins.
+
+**Free training and a credential worth having:** Cochrane Crowd is an open platform where volunteers
+screen abstracts for real Cochrane reviews. It teaches you screening properly, costs nothing, and
+gives you a legitimate line for your CV. Doing a few thousand records there before you start your own
+review means you go in as an experienced screener rather than an inexperienced one — which, given the
+error rates above, materially improves the quality of your own review.
+
 **Division of labour to propose:** you do the searching, screening, extraction, analysis and first
 draft. The academic supervises, is the second screener or nominates one, and revises. You are first
 author, they are senior author. That is a normal and fair arrangement, and stating it plainly makes
