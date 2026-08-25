@@ -3,9 +3,13 @@
 Prepared 25 August 2026. Every rule below is sourced from Monash policy or official pages; links are
 at the bottom. Anything I could not confirm is flagged as **verify**.
 
-See also `monash-course-options.md`, which compares the specific courses — 0047 (research PhD), 4585
-and 4586 (clinical doctorates), M6046 (Master of Clinical Psychology) and D6008 (Master of
-Professional Psychology) — on entry requirements, cost, registration outcomes and career pathways.
+See also:
+
+- `monash-course-options.md` — compares the specific courses (0047 research PhD, 4585 and 4586
+  clinical doctorates, M6046 Master of Clinical Psychology, D6008 Master of Professional Psychology)
+  on entry requirements, cost, registration outcomes and career pathways.
+- `clinical-neuropsych-feb-2028-plan.md` — execution plan for a self-funded February 2028 start in
+  4586, including the published selection criteria and a fallback ladder.
 
 ## Your situation as stated
 
