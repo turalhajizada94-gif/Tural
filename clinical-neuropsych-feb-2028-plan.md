@@ -152,6 +152,118 @@ experience, personal statements and interviews are assessed by UQ and Melbourne 
 explicitly lists "relevant work experience", referee reports, a personal statement and a multiple
 mini interview. Nothing in that plan is wasted by this change of target. Only the destination moves.
 
+## Would another Melbourne university have a lower scholarship bar?
+
+No, and it is worth understanding why, because it saves you chasing it.
+
+**The 80+ preference is not a Monash rule.** It is how the Australian Government's Research Training
+Program stipend allocation works at every Australian university. Each institution receives an RTP
+block grant and awards stipends competitively, and they all prioritise first-class-honours-equivalent
+applicants. Shopping between universities will not find you a materially lower stipend bar for a
+research doctorate.
+
+What genuinely varies between institutions is only two things: whether a particular program *requires*
+funding as a condition of admission, which is a school-level practice; and whether the program is a
+research doctorate at all.
+
+**And in Melbourne there is no other direct-entry clinical neuropsychology doctorate.**
+
+| Program | Doctorate? | Direct entry? | The gate |
+| --- | --- | --- | --- |
+| Monash 4586 | Yes | Yes | Stipend condition, plus composite ranking |
+| Melbourne 080CN | Yes | **No** — must enter 527CN first, then apply to transfer | PhD component requires 80% WAM as a hard *entry* rule, which is worse than a preference |
+| La Trobe Master of Clinical Neuropsychology | Master's | Yes | Entry requirements to be confirmed |
+| UWA 01890/54590 | Yes | Yes, at 2A | **Suspended** for 2026 and 2027, 2028 to be advised |
+
+So looking for a clinical neuropsychology PhD elsewhere in Melbourne does not avoid the problem. At
+Melbourne the equivalent path has a *harder* gate — 80% as an entry requirement rather than a
+scholarship preference — and it cannot be entered directly anyway.
+
+Check the APAC accredited program register for the definitive current list, since programs open and
+close (as UWA's has).
+
+## The genuinely easier pathway: a master's also repairs your WAM
+
+This is the part worth thinking about properly, because it dissolves the problem rather than fighting
+it.
+
+Your 70–75 GDPA average is the single binding constraint on everything — scholarships, the clinical
+doctorates, Macquarie, Melbourne's combined program. **A coursework master's replaces it.** If you
+complete a Master of Clinical Neuropsychology at 80% or above, then:
+
+- You are on the registrar pathway to endorsement as a clinical neuropsychologist. The clinical goal
+  is achieved.
+- Your most recent and most relevant qualification is now a master's at 80+, which makes you
+  genuinely competitive for a PhD stipend rather than arguing about equivalence.
+- A master's including a research thesis or project at H2A or above independently satisfies Monash's
+  doctoral entry requirement under *Graduate Research Admissions Procedure* 1.8.2.
+
+So the two-step — **master's first, then PhD** — reaches the same destination as 4586, and each step is
+achievable rather than a lottery. It takes longer in total. But "longer and achievable" beats "shorter
+and gated on a committee decision you cannot influence".
+
+### Graduate Access Melbourne
+
+Worth knowing about specifically because it is designed for your situation. Melbourne's 527CN page
+states: "We encourage domestic students to explore eligibility for **Graduate Access Melbourne**
+(GAM). GAM offers an opportunity for admission to this course **even if your tertiary marks are below
+the standard entry requirements**. GAM applicants may also be considered for financial bursaries and
+Commonwealth Supported Places (CSPs) where available."
+
+That is an explicit below-threshold entry mechanism. It is domestic-only, so it becomes available to
+you once PR is granted — which is before the September 2027 deadline. Investigate eligibility
+directly.
+
+### The easier-pathway ranking
+
+1. **UQ 5766** — class IIA entry, Commonwealth supported at about $4,740/yr, dual endorsement in both
+   clinical neuropsychology and clinical psychology. Brisbane.
+2. **Melbourne 527CN**, with GAM as a fallback if your weighted mark falls short. Melbourne.
+3. **La Trobe Master of Clinical Neuropsychology** — Melbourne. Verify entry requirements; this may be
+   the most accessible Melbourne option.
+4. **Monash 0047 self-funded** — a PhD, no clinical registration.
+5. **D6008 Master of Professional Psychology plus the 5+1 internship** — 65% entry, general
+   registration in about two years, no endorsement.
+6. **Monash 4586** — hardest, and the only one with the stipend lock.
+
+## Deadlines, and the international-to-domestic conversion question
+
+**For a February 2028 start you do not need the conversion at all.** PR is expected around March 2027
+and every relevant deadline falls after it, so you will apply as a genuine domestic applicant:
+
+| Program | Deadline for a Feb/Jan 2028 start | Notes |
+| --- | --- | --- |
+| Melbourne 527CN | **15 September 2027** | "No late applications will be accepted." Interviews Nov–Dec, outcomes Dec–Jan |
+| Monash 4586 | ~15 September 2027 | Based on the current cycle; confirm |
+| UQ 5766 | ~30 September 2027 | Closing date is 30 September of the preceding year for Semester 1 |
+| Monash 0047 | Any time | Admission-only has no round gate; ~6 weeks to process |
+
+### The one case where conversion matters
+
+Only if you want to start in **2027** rather than 2028. There, the answer differs sharply by course
+type, and the distinction is important.
+
+**For a research degree, conversion is clean.** You could lodge an admission-only application for
+0047 as an international applicant now, commence in Research Q1 2027 (1 January – 31 March 2027,
+census 31 March 2027), and if PR is granted before that census date your fee type changes from the
+visa grant date under *Enrolment Procedure* 2.11.1 and clause 2.12 gives you the RTP Fees Offset
+automatically. It works because **every** domestic student receives the Fees Offset — there is nothing
+discretionary to miss out on. The risk is that if PR arrives after the census you are liable for a
+quarter of international fees, roughly $13,000. Verify the census mechanics with MGRO before relying
+on this.
+
+**For a coursework master's, conversion is a trap.** Converting your residency gets you domestic
+*fee status*, but it does **not** get you a Commonwealth Supported Place. CSPs are limited in number
+and allocated at the point of offer — Melbourne says plainly of its psychology programs that "there
+are a limited number of [CSPs] for this course. To ensure you are considered for [a] CSP, submit your
+[application by the deadline]". So if you entered as an international student and converted, you could
+easily end up a *domestic full-fee* student paying tens of thousands rather than a CSP student paying
+about $4,740.
+
+**Conclusion:** never try to convert your way into a coursework master's. Wait until you hold PR and
+apply as a domestic applicant in the ordinary round, which for a February 2028 start you can do
+comfortably. Use conversion only for a research degree, where the fee offset is automatic.
+
 ## Resolve this before anything else
 
 The School told you it does not admit full-time candidates without a scholarship, on duty-of-care
