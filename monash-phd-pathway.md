@@ -198,6 +198,90 @@ round). Their normal route is: pick a project, email the supervisor with CV and 
 an interview. Contact `graduateeducation@qimrb.edu.au`. Note their admission process can take up to
 12 weeks and runs in parallel with university admission.
 
+## Can 0047 be funded, or is self-funding the only option?
+
+It can absolutely be funded. Self-funding is a floor, not the only route, and framing it as the only
+route was misleading. But there are four ways to get a stipend for a research PhD and they have very
+different odds — and the one with the 80+ preference is the one your portfolio helps with least.
+
+### Route 1 — the central competitive round
+
+Domestic Round 2 (closes 31 May) or Round 4 (closes 31 October). You are ranked university-wide, and
+this is where *RTP Scholarship Procedure* 3.3.1's first-class-honours preference bites hardest.
+
+Your portfolio argues the alternative limb of that clause — "**or** qualifications and/or research
+experience deemed equivalent by the University" — and clause 3.2 makes awards on "academic record,
+research output **and prior research experience**", so a publication and a year of research work are
+genuinely in scope. Realistically, though, odds are low against a national field of H1 applicants.
+
+Apply anyway. It costs nothing: the scholarship application is submitted with the course application,
+and applying in a round does not jeopardise admission, since "admission assessment usually begins
+after scholarship results have been released".
+
+### Route 2 — project and grant-funded stipends. This is where your portfolio wins
+
+Monash schools advertise PhD stipends attached to specific ARC and NHMRC grants at the same
+$37,145 rate, for 3.5 years, often with additional support funds. The published instructions tell you
+to "Select **Admission Only** as the Application Type" and name the scholarship under Research Program
+Funding — meaning these sit outside the competitive rounds entirely.
+
+Selection is by the supervisor and project team on **fit with the project**, not by university-wide
+academic ranking. That is precisely where an eleven-month research relationship, a first-author
+publication in the project's area, three years of clinical support work with the relevant population,
+and working R and GCP competence actually count for something. This is the realistic funded route,
+and it is the same money on the same terms — not a consolation prize.
+
+The catch is that these appear unpredictably and have their own deadlines, so you have to be watching
+continuously: Supervisor Connect, MNHS graduate research pages, and school newsletters.
+
+### Route 3 — institute EOI scholarships
+
+Turning Point runs an EOI-based PhD scholarship program funded through the MNHS Graduate Research
+Program: full-time stipend, up to 3.5 years, enrolment through Eastern Health Clinical School. You
+email a completed EOI form naming a program area. EOI and interview, not a WAM ladder.
+
+### Route 4 — external funders, entirely outside the Monash system
+
+The *RTP Scholarship Procedure* states in its scope that it "does not apply to externally-funded
+scholarships". External bodies fund PhD stipends and top-ups on their own criteria, which are usually
+about topic fit and project merit rather than your undergraduate average. Confirmed live examples:
+
+| Funder | What | Timing | Notes |
+| --- | --- | --- | --- |
+| **Australian Rotary Health** — General Health PhD Scholarship | Stipend plus incidental support, full-time | First round 2027 **opens 7 December 2026, closes 28 May 2027** | Requires Australian citizenship, PR or NZ citizenship — you will have PR. Also requires enrolment at an Australian university and a confirmed supervisor. Note: no funding for the Ian Scott Mental Health PhD scholarships in the 2027/29 cycle |
+| **Dementia Australia Research Foundation** — Clinical Practice Post-graduate Stipend | $30,000 over one to two years, and "can be taken in conjunction with another scholarship" | 2026 round closed 27 July 2026; expect the 2027 round to open around 1 June | For "health professionals undertaking a PhD, in any area of dementia research". Check whether your background satisfies their definition of health professional |
+| Disease-specific foundations | Stipends and top-ups | Various | Brain Foundation, MS Australia, Epilepsy Foundation, Stroke Foundation, Parkinson's Australia and similar. Worth a systematic trawl once your topic is settled |
+
+Note the Rotary Health condition: applicants must be enrolled or about to commence. So starting
+self-funded and then winning an external scholarship is an entirely legitimate sequence, not a
+fallback.
+
+### The sequencing rule that matters
+
+Self-funding is **leverage**, not just a safety net. Telling a supervisor you can commence regardless
+of the scholarship outcome makes you dramatically easier to say yes to, because it removes the funding
+uncertainty from their decision. And current students can apply for scholarships — the same myApp
+portal is used "whether you are a new applicant or a current student".
+
+But there is a cost to waiting, and two clauses set it:
+
+- **4.9** — "the duration of a scholarship will be reduced by any periods of study undertaken towards
+  the degree prior to the commencement of the scholarship." Self-fund one year, win a stipend, and you
+  receive 2.5 years rather than 3.5.
+- **3.3.4** — the Committee prioritises applicants "entitled to a maximum scholarship duration of more
+  than 12 months EFT as a result of prior enrolment". So once you have consumed most of your
+  candidature you actively fall down the ranking.
+
+**So if you start self-funded, apply in the very next round — not eventually.** Self-funding for two
+years while hoping is the one version of this that fails.
+
+### The combined play
+
+Apply for 0047 admission and scholarship together in domestic Round 2 (closing 31 May 2027) or Round 4
+(closing 31 October 2027). You get free consideration for the central stipend. If you miss it, you
+commence anyway on savings, and then run all four routes in parallel: the next central round, Rotary
+Health by 28 May, Dementia Australia around July, and every advertised project stipend that appears.
+
 ## Part-time: what it does and does not cost you
 
 You asked whether part-time carries the same weight. Honest answer, split into the parts that matter.
