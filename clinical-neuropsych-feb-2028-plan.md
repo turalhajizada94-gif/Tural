@@ -127,10 +127,16 @@ output, and for a 4586 application where 70% of the degree is a 60,000–80,000 
 that you can carry a project to publication is directly on point. Talk to your GDPA supervisor about
 this before you finish, while the data is fresh and they are still invested.
 
-### 6. Provisional registration with AHPRA — once the GDPA is complete
+### 6. Provisional registration with AHPRA — not yet available
 
-The GDPA makes you eligible. It demonstrates commitment, keeps you current, and is a prerequisite for
-much of the applied work above.
+Correction: you cannot hold provisional registration while unenrolled. The PsyBA standard requires
+that you "need provisional registration in order to complete one of the following programs of
+supervised practice", and the application requires you to nominate the fifth-year program and
+provider you will train at, with the provider supplying evidence of enrolment.
+
+This costs you nothing, because the entry requirements for these programs say *eligible for*
+provisional registration rather than *holding* it, and your completed GDPA makes you eligible. You
+will apply once you commence in February 2028. See `perth-to-melbourne-roadmap.md`.
 
 ### 7. The video statement — draft from early 2027, film in August 2027
 

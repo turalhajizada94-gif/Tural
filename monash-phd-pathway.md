@@ -10,6 +10,9 @@ See also:
   on entry requirements, cost, registration outcomes and career pathways.
 - `clinical-neuropsych-feb-2028-plan.md` — execution plan for a self-funded February 2028 start in
   4586, including the published selection criteria and a fallback ladder.
+- `perth-to-melbourne-roadmap.md` — month-by-month roadmap from October 2026 to February 2028,
+  covering the Perth-to-Melbourne transition, research and clinical experience, publication strategy
+  and short courses.
 
 ## Your situation as stated
 
