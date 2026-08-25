@@ -214,6 +214,149 @@ before you finish in October, while the data is fresh and they are still investe
 conference — the Australasian Society for the Study of Brain Impairment, the APS College of Clinical
 Neuropsychologists conference, or an addiction or neuroscience meeting.
 
+### What a systematic review actually is
+
+**A systematic review is a study whose data is other studies.** That is the whole idea. Instead of
+recruiting participants, you treat the published literature as your dataset, and you go through it
+with a method so explicit that someone else could repeat your search and get the same set of papers.
+
+The contrast with an ordinary literature review is worth being precise about, because it is the
+entire reason a systematic review counts as research:
+
+| | Ordinary literature review | Systematic review |
+| --- | --- | --- |
+| Question | Broad topic | One narrow, pre-specified question |
+| Search | Whatever you found and thought was relevant | Documented search strings, named databases, dates, reproducible |
+| Inclusion | Implicit, author's judgement | Pre-declared criteria, applied by two independent screeners |
+| Method fixed | After the fact | **Before you start**, and registered publicly |
+| Quality of included studies | Usually not assessed | Formally appraised with a risk-of-bias tool |
+| Reporting | Free form | PRISMA 2020 checklist |
+| Counts as | Background reading | An original, citable, peer-reviewed study |
+
+A **meta-analysis** is an optional extra step on top: if the included studies report comparable
+numbers, you statistically pool them into a single overall effect size. Not every systematic review
+can have one — if the studies are too different in design or measures, you write a narrative
+synthesis instead, which is entirely legitimate and still publishable.
+
+### Why it is the right move for you specifically
+
+Five reasons, and they compound:
+
+1. **No gatekeepers.** No ethics approval, no participants, no lab access, no equipment, no funding.
+   Almost everything else that would give you a research output requires someone to grant you access
+   to something. This does not.
+2. **Cheap for the academic to agree to.** This is the real reason it works. When you ask an academic
+   for lab involvement you are asking them to spend supervision time and resources on you. When you
+   propose a systematic review, you are offering to do several hundred hours of labour that produces
+   a paper with their name on it. The answer is much more often yes.
+3. **Remote-compatible.** Every step works from Perth. It is the only substantial research
+   contribution that survives your March relocation without interruption, which is what gives you
+   the eleven-month referee relationship.
+4. **It is long.** Six to twelve months part-time. That is a feature: it is what makes the working
+   relationship deep enough for a referee to write something specific about you.
+5. **It maps onto what 4586 actually assesses.** Seventy per cent of that degree is a 60,000–80,000
+   word thesis. A completed systematic review is direct evidence that you can define a question,
+   follow a protocol for months, and produce a long written document. It also counts as a research
+   output under Graduate Research Admissions Procedure clause 1.10.2.
+
+### PROSPERO, and what registration is for
+
+**PROSPERO** is the international prospective register of systematic reviews, run by the Centre for
+Reviews and Dissemination at the University of York. It is free. You submit your planned method
+*before* you start extracting data, and it is published publicly with a permanent record.
+
+Why it matters:
+
+- **It prevents you being scooped or duplicated.** You also search it first, to check nobody else is
+  already doing your review.
+- **Many journals now require it.** A systematic review that was not prospectively registered gets
+  desk-rejected or questioned by reviewers.
+- **It stops you moving the goalposts.** Registering the method in advance is what makes the review
+  credible rather than a fishing expedition.
+- **It is a citable record months before the paper exists.** This is the practical point for you: a
+  PROSPERO entry with your name on it as first author is public evidence of active research work,
+  and you will have it within about two months of starting.
+
+Eligibility limits to know: PROSPERO "prospectively registers systematic reviews with outcomes of
+direct relevance to health within humans" and does **not** accept scoping reviews, evidence and gap
+maps, traditional literature reviews that merely use a systematic search, or reviews that have
+already begun data extraction. Cognitive or clinical outcomes in addiction, OCD or brain injury are
+comfortably health-related, so a review in your area of interest qualifies.
+
+If your question ends up being a **scoping review** instead — a map of what evidence exists rather
+than an answer to a narrow question, which is a reasonable choice for a first-timer — PROSPERO will
+not take it. Use OSF Registries, which is free and accepts any study type, or INPLASY, which accepts
+scoping reviews and turns around in about 48 hours but charges a fee.
+
+### The process, and roughly what each stage costs you
+
+| Stage | What happens | Rough effort |
+| --- | --- | --- |
+| 1. Define the question | Usually framed as PICO — Population, Intervention or exposure, Comparator, Outcome. Narrow is good. Run quick scoping searches to check there is enough literature but not too much, and check PROSPERO for duplicates | 2–4 weeks |
+| 2. Write the protocol | Question, eligibility criteria, databases, search strings, screening process, extraction fields, risk-of-bias tool, synthesis plan | 2–3 weeks |
+| 3. Register it | PROSPERO (free) or OSF | Days |
+| 4. Run the search | Execute across several databases — typically PsycINFO, MEDLINE, Embase, Scopus, Web of Science. A university librarian will help you build this and it is worth asking | ~1 week |
+| 5. Title and abstract screening | The big one. A search may return two to six thousand records. Two people screen independently against the criteria and resolve disagreements | 4–8 weeks part-time |
+| 6. Full-text screening | Read the surviving hundred-or-so papers in full, apply criteria again | 3–6 weeks |
+| 7. Data extraction | Pull the same fields from every included study into a structured table | 4–8 weeks |
+| 8. Risk-of-bias assessment | Appraise each study with an appropriate tool | 2–3 weeks |
+| 9. Synthesis | Meta-analysis if the data allows, otherwise narrative synthesis | 2–4 weeks |
+| 10. Write and submit | PRISMA 2020 checklist, PRISMA flow diagram | 4–8 weeks |
+
+Total: **six to twelve months part-time**, which fits your October 2026 to July 2027 window almost
+exactly.
+
+**One thing you cannot do alone:** screening is meant to be done independently by two people. So the
+pitch needs a second screener — usually the academic, a PhD student in the group, or another
+volunteer. Say so upfront; it shows you know the method.
+
+**Division of labour to propose:** you do the searching, screening, extraction, analysis and first
+draft. The academic supervises, is the second screener or nominates one, and revises. You are first
+author, they are senior author. That is a normal and fair arrangement, and stating it plainly makes
+the pitch credible.
+
+### Tools
+
+- **Screening:** Covidence (Monash has an institutional subscription; Rayyan is a free alternative)
+- **References:** EndNote, Zotero or Mendeley
+- **Meta-analysis:** the `meta` or `metafor` packages in R, which is another reason R is on your
+  skills list
+- **Reporting:** the PRISMA 2020 statement and checklist, freely available
+- **Method training:** Cochrane's free interactive learning modules, and the Cochrane Handbook
+
+### Candidate topics in your area
+
+Concrete enough to pitch, and sitting between your interests and the groups you would approach:
+
+- Digital or app-based cognitive assessment in substance use disorders: what has been validated, and
+  how well
+- Cognitive predictors of treatment outcome in alcohol or stimulant use disorder
+- Cognitive flexibility or compulsivity as a transdiagnostic marker across addiction and OCD
+- Gamified versus conventional neurocognitive task batteries: reliability and validity
+- Cognitive bias modification delivered by smartphone: effects on substance use outcomes
+- Neuropsychological profiles in behavioural addictions such as gaming or gambling
+
+Do not arrive with a fixed topic. Arrive with two or three plausible ones and ask which is closest to
+a gap they care about. An academic proposing the final question is a feature, not a failure — it makes
+it their project too.
+
+### The honest caveats
+
+- **Publication is slower than you think.** If you submit in mid-2027, peer review takes three to
+  nine months, so the paper is unlikely to be formally published before your September 2027
+  application. Monash's scholarship application system reportedly only allows you to list work that
+  is published, accepted or in press — not under review. So plan to **submit by around April 2027** if
+  you want any chance of acceptance in time, and target a journal with fast turnaround.
+- **A published protocol is the workaround, and it is a good one.** Several journals — *Systematic
+  Reviews*, *BMJ Open* and others — publish systematic review protocols as standalone peer-reviewed
+  papers. That is a genuine publication, achievable within a few months of starting, months before
+  the review itself is finished. If you want a real publication on the CV by September 2027, this is
+  the most reliable route to it. Raise it with the academic early.
+- **Screening is tedious.** Thousands of abstracts. Most people underestimate this stage and stall
+  there. Budget for it and do it in consistent daily blocks rather than heroic weekends.
+- **Scope creep kills these projects.** A question that is too broad produces an unmanageable search.
+  Narrower is almost always better for a first review.
+
 ## Workstream 4: short courses and skills, ranked by return
 
 You said you have full availability and are open to short courses. Here is where the return actually
