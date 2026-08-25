@@ -48,6 +48,110 @@ This is a fundamentally different game from the central scholarship round, where
 dominates. It is the reason a 70–75 applicant can be competitive here, and it is where all your
 effort should go.
 
+## Reconciling the published criteria with what admissions told you
+
+Both statements are probably true, and together they are worse than either alone. I have been leaning
+on the published selection criteria as grounds for optimism, and on reflection the admissions
+officer's account is more likely to describe how this actually operates than my reading of a public
+webpage. Here is the honest reconciliation.
+
+**They describe two different gates, not one.** The published criteria describe how applicants are
+*ranked* — "a system that combines academic marks, referee reports, video statement, and interview".
+The admissions officer described a *funding* condition: a place requires a stipend, and stipends
+prioritise first class honours. If both hold, then the composite ranking tells you your position in
+the queue, and the scholarship rule tells you whether a good position is sufficient. Being ranked
+well is necessary and not sufficient.
+
+**The School's own wording supports the admissions officer.** Its FAQ refers to being "considered for
+a **course and scholarship offer**" as a single object, and requires final results "in order to be
+considered for a course and scholarship offer". That is consistent with places coming with stipends
+attached and cohort size being set by the funded allocation.
+
+**What is left, and it is genuine but thin.** *RTP Scholarship Procedure* 3.3.1 directs the Committee
+to "**prioritise** applicants who hold an Australian or New Zealand bachelor's degree with first class
+honours **or qualifications and/or research experience deemed equivalent by the University**". Two
+things in that sentence: "prioritise" is not "require", and there is an explicit alternative limb for
+research experience deemed equivalent. That alternative limb is the only documented route for a
+70–75 applicant, and it is precisely what a first-author publication, eleven months of research
+assistant work and strong referees would be arguing for. It is a real mechanism. It is not a
+reliable one.
+
+**One point about the source.** The advice you received came from central admissions, which answers
+general enquiries and correctly quotes general University rules. The School of Psychological Sciences
+Graduate Research Team is the authority on how 4586 specifically allocates places and stipends. It is
+entirely possible central admissions is right. It is also possible they quoted the general RTP
+prioritisation without knowing the clinical program's internal allocation. That is worth one email to
+settle, but plan on the pessimistic reading until it is settled.
+
+**Conclusion: 4586 is a stretch application, not a plan.** Treat it accordingly.
+
+## The strategic consequence: the scholarship wall only exists for research degrees
+
+This is the most important thing in this document, and it reframes everything above.
+
+**A stipend is the funding model for a graduate research degree. It is not the funding model for a
+coursework master's.** In a coursework master's there is no stipend to win and therefore no
+scholarship gate at all — you enrol, you pay a student contribution, and you fund your own living
+costs. Which you can do.
+
+So the wall that blocks 4586 does not exist on the master's route to exactly the same profession.
+
+**The University of Queensland's program 5766 is the standout.** Master of Clinical Neuropsychology
+**and** Clinical Psychology:
+
+- Entry: "a bachelor honours degree in psychology (**minimum class IIA** honours) or equivalent,
+  4-year APAC accredited degree", plus eligibility for provisional or general registration. **You meet
+  this.**
+- 2.5 years full-time, February intake, applications close around 30 September for Semester 1.
+- **Domestic places are Commonwealth supported**, with an indicative annual student contribution of
+  about **$4,740**, deferrable through HECS-HELP once you are a permanent resident.
+- Produces area of practice endorsement in **both** clinical neuropsychology **and** clinical
+  psychology — the only program identified that does both.
+
+Read that again against your situation: entry bar you meet, roughly $4,740 a year rather than a
+competitive stipend you cannot win, and it makes you a dual-endorsed practitioner. The cost is that
+it is a master's rather than a doctorate, so the registrar program is 3,000 hours rather than 2,250,
+and it is in Brisbane rather than Melbourne.
+
+**Melbourne's 527CN is the Melbourne-based equivalent worth checking carefully.** Master of Psychology
+(Clinical Neuropsychology) requires a WAM of "at least H2A (75%)" — but note *how* it is calculated:
+"a weighted average of third year (Level 3) and fourth year (Level 4) psychology subjects. The average
+of the fourth year (Level 4) Psychology subjects are weighted by 2 and the average of the third year
+(Level 3) Psychology subjects are weighted by 1."
+
+Your GDPA is the Level 4 component and it counts double. So if your GDPA average lands at 78 and your
+third year was 72, the calculation is (72 + 156) / 3 = 76, which clears the bar. If your GDPA lands at
+74 on a third year of 70, it does not. **This is a concrete, arithmetic reason to push as hard as you
+possibly can on the next six weeks.** Melbourne also runs Graduate Access Melbourne, which "offers an
+[alternative pathway] for admission to this course even if your tertiary marks are below the standard
+entry requirements" — worth investigating directly.
+
+**Not viable:** Macquarie states that "applicants who have achieved WAMs less than the stated
+requirements will be excluded from the applicant pool", with minimum WAM 75 in both the first three
+years and the fourth. UNSW's program requires you to already be a registered psychologist holding an
+area of practice endorsement, so it is a bridging program rather than an entry route.
+
+## The revised strategy
+
+Pick the goal first, because the three goals have very different difficulty.
+
+| If your goal is | Do this | Why it works |
+| --- | --- | --- |
+| **Become a clinical neuropsychologist** | UQ 5766, applications ~30 September 2027 for February 2028. Melbourne 527CN in parallel if your GDPA mark gets you over the weighted 75 | No stipend gate. Entry bar met. ~$4,740/yr, HECS-deferrable. UQ gives dual endorsement |
+| **Get a PhD** | Monash 0047, self-funded, neuropsychology project. Admission-only, any time of year | No stipend gate. Domestic tuition $0. Turns on a supervisor agreeing, which you can influence |
+| **Both at once** | Monash 4586 | The hardest path available, and the only one with the scholarship lock on it |
+
+You have been aiming at the one door with a lock on it while two unlocked doors sit beside it.
+
+**What I would now recommend.** Make **UQ 5766** or **Melbourne 527CN** your primary clinical target
+and **0047** your primary research target. Submit 4586 as well — the marginal cost is one application
+and the composite ranking gives you a real if modest chance — but stop treating it as the plan.
+
+Every action in `perth-to-melbourne-roadmap.md` still applies, because referee reports, relevant work
+experience, personal statements and interviews are assessed by UQ and Melbourne too. Macquarie
+explicitly lists "relevant work experience", referee reports, a personal statement and a multiple
+mini interview. Nothing in that plan is wasted by this change of target. Only the destination moves.
+
 ## Resolve this before anything else
 
 The School told you it does not admit full-time candidates without a scholarship, on duty-of-care
