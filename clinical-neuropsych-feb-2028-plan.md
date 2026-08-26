@@ -264,6 +264,127 @@ about $4,740.
 apply as a domestic applicant in the ordinary round, which for a February 2028 start you can do
 comfortably. Use conversion only for a research degree, where the fee offset is automatic.
 
+## Assessment of the advice from the Monash instructor
+
+Advice received: apply for the Master of Clinical Psychology; perform well; supervisors will then
+approach you with a PhD opportunity and a scholarship; this gets you both the research and the
+clinical pathway. International deadline for the 2027 intake reportedly 10 September 2026.
+
+**The strategy is sound** and matches the conclusion reached independently in this document: a
+coursework clinical master's is the accessible entry point, and completing it at a high mark replaces
+your 70–75 GDPA average as the academic record that matters, which makes a funded PhD afterwards
+realistic rather than a lottery. That is good advice and it is the right shape.
+
+Four corrections to the execution.
+
+### 1. Monash M6046 requires 80%, on both components
+
+As published: "an APAC-accredited four-year sequence comprising a three-year undergraduate major in
+psychology (or equivalent) with an average of **80%**, and a fourth-year Honours specialisation in
+psychology (or equivalent) with an average of **80%**."
+
+At 70–75 you are below both. Verify this before anything else, because it decides whether this plan can
+start at Monash at all. Note that a GDPA teaching instructor is describing the pathway in principle;
+she is not the admissions office and may not have checked your numbers against the threshold. Get the
+answer from the School in writing.
+
+### 2. Melbourne is more accessible than Monash for exactly the same strategy
+
+This is the most useful correction. Melbourne's clinical master's programs require a **weighted 75%**,
+not 80% — and the weighting works in your favour:
+
+| Program | Requirement | How it is calculated |
+| --- | --- | --- |
+| Monash M6046 | 80% on the three-year major **and** 80% on the fourth year | Both components separately |
+| Melbourne 527CL (Clinical Psychology) | WAM of at least H2A (75%) | Weighted average of third and fourth year psychology subjects, **fourth year weighted double** |
+| Melbourne 527CN (Clinical Neuropsychology) | WAM of at least H2A (75%) | Same double weighting of fourth year |
+
+Because your GDPA is the fourth-year component and it counts double, a strong GDPA result can pull you
+over 75 even with a weaker third year. Melbourne also runs Graduate Access Melbourne for domestic
+applicants below the standard marks. And Melbourne offers the neuropsychology version at the same
+threshold, which Monash's route does not.
+
+Both Melbourne programs use the same selection architecture: prior marks, a 500-word personal
+statement, two referee reports, and an interview if shortlisted. Deadline 15 September for the
+following year's intake, with no late applications.
+
+### 3. You would not be "approached" for a PhD — you would apply for one
+
+There is no formal transfer from a coursework master's into 4585 or 4586. Those are separate courses
+with a single February intake and their own competitive selection, and the graduate research transfer
+provisions in the *Admissions Procedure* apply between research courses, which M6046 is not.
+
+More to the point, you would not want 4585 after M6046 — you would already hold the clinical
+psychology qualification. What you would actually do is apply for a **research PhD (0047)**, which is
+substantially easier with a master's at 80+ behind you.
+
+So the destination is right and the mechanism is informal goodwill rather than a pathway. Supervisors
+genuinely do encourage strong master's students toward PhDs, and that is worth cultivating — but do
+not build a plan on being approached. Plan to apply.
+
+### 4. M6046 gives clinical psychology only, not neuropsychology
+
+Clinical psychology and clinical neuropsychology are separate areas of practice endorsement with
+separately protected titles. "Clinical psych/neuropsych" conflates them. If neuropsychology is what
+you want, M6046 does not lead there — you would need a neuropsychology-specific program, and adding
+the second endorsement later requires a bridging program of 66 weeks and 2,250 hours.
+
+Decide which one you actually want before choosing a program, because this choice is expensive to
+reverse.
+
+### The 10 September 2026 deadline is a money trap
+
+You would be applying for the February 2027 intake as an **international** applicant, because PR is not
+expected until March 2027. Three consequences:
+
+1. **Commonwealth Supported Places are domestic-only.** As an international student you would pay full
+   international fees, reported at roughly $43,400 per year for this program.
+2. **Converting after PR does not get you a CSP.** As established earlier, changing residency gets you
+   domestic *fee status*, but CSPs are limited and allocated at the point of offer. You could easily
+   end up a *domestic full-fee* student rather than a CSP student.
+3. **Your GDPA results will not exist by 10 September 2026** — you finish on 2 October. An 80%-gated
+   assessment would be made on incomplete marks.
+
+The cost of that year, roughly:
+
+| Route | Tuition over two years |
+| --- | --- |
+| February 2027, international | ~$86,800 |
+| February 2028, domestic with a CSP | ~$9,500 (postgraduate clinical psychology sits in Funding Cluster 2 at a maximum student contribution of $4,738 per EFTSL), deferrable through HECS-HELP |
+
+That is roughly **$77,000 for a one-year head start**. Also check the deferral rules before assuming
+you could accept a 2027 offer and defer — Monash states explicitly of D6008 that "if you receive an
+offer for this course, you will not be able to defer your offer to a future intake", so confirm
+whether M6046 is the same.
+
+### Revised recommendation
+
+Do the master's. Target **February 2028 as a domestic applicant**, not February 2027 as an
+international one.
+
+Primary targets, in order: **Melbourne 527CN** if neuropsychology is the goal or **527CL** if clinical
+psychology is (weighted 75%, GAM as a fallback, 15 September 2027); **UQ 5766** (class IIA entry, CSP,
+dual endorsement, ~30 September 2027); **Monash M6046** only if the 80% turns out to be discretionary.
+Then a research PhD afterwards with a repaired academic record.
+
+### What actually increases your chances at a coursework master's
+
+The selection architecture is the same across all of them — prior marks, personal statement, two
+referee reports (typically one academic and one professional), relevant work experience, and an
+interview. So the priorities shift slightly from the research-focused plan below:
+
+1. **The GDPA mark, in the next six weeks.** Now doubly weighted at Melbourne, so arithmetically the
+   highest-leverage thing you will do all year.
+2. **Your three years of disability support work.** These programs ask for it directly — Monash's
+   D6008 requires "relevant voluntary or paid work experience" as an explicit criterion. Re-aim it
+   toward brain injury and dementia clients if neuropsychology is the target.
+3. **Two referees, one academic and one professional.** Line both up now.
+4. **The personal statement.** 500 words at Melbourne. Specific, evidenced, and clear about why this
+   specialty.
+5. **Interview preparation.** Shortlisted applicants are interviewed at every one of these programs.
+6. **The systematic review still matters**, but for the PhD step rather than master's entry. Keep it —
+   it is what makes the second half of the plan work.
+
 ## Resolve this before anything else
 
 The School told you it does not admit full-time candidates without a scholarship, on duty-of-care
