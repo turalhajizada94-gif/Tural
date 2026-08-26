@@ -217,6 +217,94 @@ for the 80% threshold.
 Neuropsychology/PhD is "available for **local applicants**" only. As an international student in first
 year you would not be eligible; with PR granted by then you would be.
 
+## Is a portfolio year worth it, and what should be in it?
+
+Yes to building the portfolio. No to treating it as an alternative to applying now, and no to the
+composition proposed — volunteer RA, R, research certificates — because that is weighted for the wrong
+decision.
+
+### Don't make it either/or
+
+The 2027 applications close in three to six weeks, cost an application fee, and can be declined. So
+apply now *and* start building from October. If 2027 lands you are a year ahead and the portfolio work
+becomes research experience you carry into the degree. If it doesn't, the portfolio year happens anyway
+and you are stronger for 2028. Framing it as "spend a year first" throws away a free option.
+
+### What these programs actually select on
+
+Compare the published criteria side by side. This is the crux.
+
+| Program | Stated selection basis |
+| --- | --- |
+| Deakin DPsych | "academic results, relevant work experience, referees' reports, personal statements and performance at interview" |
+| Swinburne DPsych | "knowledge and skill related to research"; "demonstrable counselling experience (e.g. Lifeline, Care Ring, or similar) is preferable" |
+| Melbourne 527CN/CL | prior marks; 500-word personal statement; two referee reports; interview |
+| Monash 4585/4586 | academic marks, referee reports, video statement, interview. "Grades are important but not the sole criterion. Relevant volunteer or work experience, clear communication skills, and a genuine interest in [the] field are important" |
+| Cairnmillar | "(a) academic record, (b) previous work experience and training, (c) academic and professional referee reports and (d) admissions interview" |
+
+**Publications and statistical skills appear almost nowhere in clinical program admission.** What
+appears everywhere is: marks, relevant work experience, referee reports, personal statement, interview.
+
+Where the research portfolio *is* decisive is scholarships and research-degree funding:
+
+| Award | Stated basis |
+| --- | --- |
+| Swinburne Research Stipend | required documents include "evidence of prior research including publications"; selection weighs research and publication experience |
+| Deakin RTP / DUPRS | "previous relevant work experience, publications and other research experience" |
+| Monash RTP | "academic record, research output and prior research experience" |
+| Melbourne 080CN transfer | research proposal, supervisor endorsement, "relevant prior research and/or professional experience" |
+
+So the division is clean: **clinical experience, referees and interview get you admitted. Research
+output gets you funded.** You need both, but not in the proportions you proposed.
+
+### The portfolio does not fix your actual blocker
+
+Worth being blunt about this. A publication will not turn 70–75 into 80. At Melbourne it can only
+support a discretionary equivalence argument at the transfer point. At Deakin and Swinburne you already
+clear the entry bar, so the portfolio is not getting you over a threshold — it is competing you against
+other H2A applicants, and against those applicants the deciding factors are clinical experience,
+referee quality and interview performance.
+
+### Reallocated: what the year should actually contain
+
+**Tier 1 — admission levers**
+
+1. **Crisis-line work.** Swinburne names Lifeline explicitly, which makes this the single most
+   target-aligned thing on the list. Lifeline WA runs the nationally recognised **CHCSS00113 Crisis
+   Support Skill Set** over a 12-month pathway (initial training, student placement, student
+   internship), roughly 12 hours a month, with a $400 student contribution.
+   **Residency catch:** the telephone stream states that "Australian/NZ Citizenship or Permanent
+   Residency is required to be eligible to apply" — but also that "if you are not a resident, you can
+   still volunteer with us" via **Digital Crisis Supporter** training. So start on the digital stream
+   now and move to the accredited telephone pathway once PR is granted.
+2. **Keep the paid disability support work**, re-aimed toward brain injury, stroke and dementia clients
+   if neuropsychology stays on the table. It is income, experience and a professional referee at once.
+3. **Referees — four of them.** Swinburne needs two research and two professional. Identify them by
+   December 2026 and make sure each has supervised you on something substantial.
+4. **Personal statement and interview practice.** Every single program on the list interviews. This is
+   the most improvable and most neglected component.
+
+**Tier 2 — funding levers, and the 0047 fallback**
+
+5. **Volunteer or paid RA work.** Yes, worthwhile — and paid is better than volunteer on every
+   dimension.
+6. **R.** Yes. It is what makes you employable as an RA, which is how the rest compounds.
+7. **A publication or a preregistered systematic review.** The differentiator for scholarships,
+   and the thing that makes the self-funded 0047 fallback viable.
+8. **GCP and human research ethics certificates.** Cheap, quick, and they make you someone who can be
+   added to an ethics application immediately.
+
+**Not worth it**
+
+Stacking generic online "research skills" certificates. Selection panels do not count certificates;
+they read what you did. One systematic review beats ten MOOCs.
+
+### The highest-return item is still not in the portfolio
+
+You have roughly five weeks left on the GDPA. Deakin assesses **the fourth year alone**; Melbourne
+weights fourth-year marks **double**. No amount of portfolio work over twelve months moves your
+prospects as much as the number you set between now and 2 October.
+
 ## The roadmap
 
 ```
