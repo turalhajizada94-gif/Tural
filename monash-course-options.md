@@ -323,9 +323,10 @@ clearly meet. If becoming a registered psychologist quickly is important to you,
 realistic route — roughly two years to registration, versus a competitive lottery for 4585 or a
 threshold you do not meet for M6046.
 
-Also worth noting: entry thresholds for clinical master's programs vary by provider. Some set the bar
-at a WAM of 70 rather than 80. If a clinical master's is what you actually want, Monash is not the
-only option and its 80% requirement is at the strict end.
+Also worth noting: entry thresholds vary considerably by institution, and Monash's 80% is at the
+strict end. Melbourne's clinical master's programs require a weighted 75%, and the Deakin and
+Swinburne professional doctorates accept H2A. See `optimal-pathway.md` for the full comparison — those
+two doctorates are now the primary recommendation, and they reach both goals in one program.
 
 ## How I would decide
 
@@ -346,8 +347,9 @@ long shot and keep a fallback.
 
 **If the answer is yes and practice is the real goal:** **M6046 is not currently available to you**
 at 70–75. The workable route is **D6008 + the 5+1 internship** for general registration in about two
-years, and if you later want clinical endorsement you can pursue a bridging program. Alternatively
-look at clinical master's programs elsewhere that set entry at a WAM of 70.
+years, and if you later want clinical endorsement you can pursue a bridging program. But see
+`optimal-pathway.md` first: the Deakin and Swinburne professional doctorates accept H2A and deliver
+practice *and* a doctorate together, which is a better answer than either half on its own.
 
 **If you want to keep both doors open**, note that this means applying to both in the same cycle and
 then choosing between offers — *not* enrolling in one as a hedge. Because prior candidature is

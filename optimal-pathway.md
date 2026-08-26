@@ -39,16 +39,21 @@ including twelve months as a PR — so it is years away. Plan on paying cash thr
 | --- | --- | --- |
 | Research doctorate (RTP Fees Offset) | **$0** | Nothing |
 | CSP coursework master's | ~$4,738/yr, ~$9,500 total | **Upfront, in cash** |
-| Private provider master's (ISN, Cairnmillar) | ~$84,000–85,000 total | **Upfront, in cash** — no FEE-HELP |
+| Private provider master's (Cairnmillar) | ~$85,000 total | **Upfront, in cash** — no FEE-HELP |
 | International place | ~$43,000–54,000/yr | Upfront |
 
-ISN Psychology's Master of Psychology (Clinical) accepts **WAM ≥ 70**, which you comfortably meet, and
-is Melbourne-based. But it costs $42,170 a year, $84,340 total, and its own application material notes
-"FEE-HELP is not available for Permanent Residents". Cairnmillar is $84,981 with a WAM 75 threshold.
-So the two most accessible-on-paper Melbourne options are the two that would cost you roughly $85,000
-in cash.
+Cairnmillar's Master of Psychology (Clinical Psychology) is $84,981 with a WAM 75 threshold, payable in
+cash because FEE-HELP is closed to permanent residents. So the private-provider route — the one with
+the most flexible entry requirements — is also the one that would cost roughly $85,000 up front.
 
 Meanwhile the doctorates that accept H2A cost nothing.
+
+**Excluded at your direction: ISN Psychology.** You have firsthand knowledge of this provider and have
+asked that it be removed from consideration on the basis that it does not assign supervisors to
+students. It is excluded from every option list in these documents and should not be revisited. I have
+not independently assessed those concerns and am not repeating them as findings — your judgement on a
+provider you have direct experience of is the better evidence here, and supervision is not a detail you
+can compromise on in a program whose entire value is supervised clinical training.
 
 ### 2. Two Melbourne professional doctorates accept H2A and give you both credentials in one program
 
@@ -111,7 +116,6 @@ costs nothing or a great deal.
 | **La Trobe** MClinNeuro → combined Master/PhD | Master's + PhD, neuropsych | 75% overall **and H1 (80%) in fourth year** | **No** | Annual | CSP then RTP |
 | **Monash** M6046 Master of Clinical Psychology | Master's + clinical | 80% on major **and** 80% on fourth year | **No** | February | CSP ~$4,738/yr |
 | **Cairnmillar** MPsych (Clinical) | Master's + clinical | WAM 75 | Borderline | Semester 1 | ~$85,000 cash |
-| **ISN** MPsych (Clinical) | Master's + clinical | **WAM 70** | **Yes** | Multiple | ~$84,340 cash |
 | **Monash** D6008 Master of Professional Psychology | Registration only | 65% in fourth year | **Yes** | February | CSP; no endorsement |
 | **Monash** 0047 PhD | PhD only | H2A | **Yes** | Any time | $0 |
 
@@ -152,7 +156,7 @@ Why this is the optimal play:
 2. **Monash D6008 plus the 5+1 internship** — 65% entry in fourth year, CSP, about two years to general
    registration. No endorsement, but it makes you a practising psychologist and leaves a PhD for later.
 3. **UQ 5766** (class IIA, CSP, dual endorsement) if you will consider Brisbane.
-4. **Private providers** only if you are willing to pay roughly $85,000 in cash.
+4. **Cairnmillar** only if you are willing to pay roughly $85,000 in cash. ISN Psychology is excluded.
 
 ### What to do differently as a result
 
@@ -198,7 +202,6 @@ Nothing in `perth-to-melbourne-roadmap.md` is wasted, but the emphasis shifts:
 - Melbourne 527CN entry requirements — https://study.unimelb.edu.au/find/courses/graduate/master-of-psychology-clinical-neuropsychology/entry-requirements/
 - Melbourne 527CN key dates — https://study.unimelb.edu.au/find/courses/graduate/master-of-psychology-clinical-neuropsychology/how-to-apply/
 - Melbourne 080CN, no direct entry — https://study.unimelb.edu.au/find/courses/graduate/master-of-psychology-clinical-neuropsychology-doctor-of-philosophy/how-to-apply/
-- ISN Psychology Master of Psychology (Clinical) — https://www.isn.edu.au/master-of-psychology-clinical
 - Cairnmillar Master of Psychology (Clinical Psychology) — https://www.cairnmillar.org.au/course/master-psychology-clinical-psychology/
 - Monash clinical doctoral programs — https://www.monash.edu/medicine/psych/education-courses-training/clinical-doctoral-programs
 - PsyBA registrar program hours — https://www.psychologyboard.gov.au/Endorsement/Registrar-program
