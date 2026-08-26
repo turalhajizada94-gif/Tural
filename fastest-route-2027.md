@@ -156,6 +156,67 @@ is tighter.
 option. The downside case is bounded (a quarter or two of international fees, only if PR is late and
 you choose to commence anyway), and you can decline an offer. Waiting for 2028 costs a guaranteed year.
 
+## How smooth is Melbourne's master's-to-PhD transfer?
+
+Not smooth. It is a second full competitive PhD admission, and it is gated on the exact number your
+record fails. The word "articulation" makes it sound like a progression; it isn't.
+
+**What the transfer actually requires.** From the 080CN handbook, applicants "must satisfy the Doctor
+of Philosophy - Medicine, Dentistry and Health Sciences currently approved entry requirements":
+
+- **An academic threshold of 80%** — either "a four-year bachelor degree ... which includes a
+  substantial research component equivalent to at least 25% of one year of full-time study and have
+  achieved a minimum weighted average of **80%**", or "a **masters degree** ... and achieved a minimum
+  weighted average of **80%**", or "a qualification and professional experience considered to be
+  equivalent"
+- **A research proposal**
+- **Referee reports** (waived for Melbourne graduates within the last five years)
+- **"The endorsement of a prospective supervisor"**
+- And then, explicitly: **"Meeting these requirements does not guarantee selection."**
+
+Selection then weighs "prior academic performance ... understanding of the research question to be
+explored ... **performance at an interview** ... motivation and capacity to complete the course in a
+timely manner ... relevant prior research and/or professional experience ... and the referee reports."
+
+So: threshold, plus proposal, plus a supervisor willing to take you, plus an interview, plus a
+committee decision. That is a PhD application in full, not a progression.
+
+**The specific problem for you.** Both academic limbs require a **completed** qualification — a
+completed four-year degree at 80%, or a completed master's at 80%. At the end of first year you have
+neither. Your completed four-year qualification is the GDPA at 70–75, which fails. Your master's is
+half-finished, so it isn't a "masters degree" yet.
+
+You would therefore be relying entirely on the third limb — "a qualification and professional
+experience considered to be equivalent" — which is discretionary. Whether your strong first-year
+master's marks can carry that argument is precisely the question to put to the Melbourne School of
+Psychological Sciences before you commit to this route. It may well be how they operate it in
+practice; it is not what the rule says.
+
+**A practical obstacle people underestimate.** You need a supervisor's endorsement and a research
+proposal *during* first year — which at Melbourne is intensive coursework plus observational
+placements. You would be finding a supervisor, agreeing a project and drafting a proposal in the
+busiest year of a clinical program, with limited exposure to research groups. This is a real reason
+many enrolled students never make the transfer.
+
+**The structural comparison, which is the point.**
+
+| Route | Gates you must clear | Where you're vulnerable |
+| --- | --- | --- |
+| Melbourne 527CN → 080CN | **Two**: master's entry at weighted 75%, then PhD entry at 80% or "equivalent" + supervisor + interview | The second gate is 80% — your weakest number |
+| Deakin / Swinburne DPsych | **One**: H2A at entry, then you are in a doctorate from day one | You clear the only gate |
+
+That is the argument for the direct-entry doctorates in one sentence: they have one hurdle and you meet
+it, while Melbourne has two and the second is the one designed to stop you.
+
+**If you do end up on the Melbourne master's**, the levers are: maximise first-year marks, identify and
+approach a supervisor before the end of semester one rather than at the deadline, have a research
+proposal drafted early, and ask MSPS in writing whether first-year master's performance can substitute
+for the 80% threshold.
+
+**La Trobe's equivalent** carries an extra restriction: the upgrade to its combined Master of Clinical
+Neuropsychology/PhD is "available for **local applicants**" only. As an international student in first
+year you would not be eligible; with PR granted by then you would be.
+
 ## The roadmap
 
 ```
