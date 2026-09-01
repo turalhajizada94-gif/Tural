@@ -4,16 +4,14 @@
 #
 # Tural Hajizada (31843069) — PSY4414 A2, Journal Manuscript Milestone 3: Results
 #
-# Configured from the PSY4412 pre-registration, ethics application and
-# Introduction milestone. Every script reads this file.
+# Column names below are the REAL ones, read from the SPSS data dictionary
+# (DISPLAY DICTIONARY output, 176 variables, 1 September 2026 export).
 #
-# >>> THE COLUMN NAMES BELOW ARE PLACEHOLDERS AND WILL NOT MATCH YOUR EXPORT.
-# >>> Your survey was a shared battery of roughly 176 variables with generic
-# >>> Qualtrics tags (Q1, Q4_11, BFI_Q17__, Q13.0). Run
-# >>>     python scripts/inspect_export.py
-# >>> to produce output/codebook.md, which pairs every column with its question
-# >>> text, then fill in the real names here. prepare_data.py reports any item
-# >>> listed here that is missing from the export, so a mismatch is loud.
+# The survey was a shared battery of four randomised blocks:
+#   DASS-21 (21 items)          -> another project
+#   BFI-2 (60 items)            -> Open-Mindedness domain is this study's moderator
+#   Short Dark Triad (27 items) -> another project
+#   NAQ-R (22 items)            -> this study's outcome
 # ---------------------------------------------------------------------------
 
 qualtrics:
@@ -21,6 +19,8 @@ qualtrics:
   survey_id: SV_REPLACE_ME
 
 columns:
+  # Metadata names are matched loosely, so both the CSV form
+  # "Duration (in seconds)" and the SPSS form "Duration__in_seconds_" resolve.
   response_id: ResponseId
   progress: Progress
   duration: Duration (in seconds)
@@ -28,9 +28,6 @@ columns:
   distribution_channel: DistributionChannel
   start_date: StartDate
 
-  # The ethics application states responses are anonymised. Your supervisor noted
-  # Qualtrics still records IP addresses and that these are deleted at the data
-  # cleaning stage — that deletion happens here.
   drop_on_import:
     - IPAddress
     - RecipientEmail
@@ -46,93 +43,133 @@ screening:
   require_finished: true
   min_progress: 100
 
-  # 10-15 minutes was the stated burden. 180 s is a conservative speeder floor;
-  # check it against your own Prolific completion times before committing to it.
+  # Stated burden was 10-15 minutes. Check this floor against your own
+  # completion times before committing to it.
   min_duration_seconds: 180
   max_duration_seconds: null
 
   consent:
-    column: Consent
+    # "Please select 'agree' to acknowledge that you have read ... and you
+    # consent to take part in the survey." 1 = Agree, 2 = Disagree.
+    column: QID127848236
     required_value: 1
 
-  eligibility:
-    # Ethics application: adults aged 25 years or older.
-    - column: Age
-      min: 25
-      max: null
+  eligibility: []
 
-  # Two attention checks were pre-registered ("Please select 'Somewhat agree'...").
-  # Set correct_value to the numeric code your survey records.
-  attention_checks:
-    - column: AC1
-      correct_value: 5
-    - column: AC2
-      correct_value: 5
-  max_attention_check_failures: 0
-
-  # Categorical eligibility, e.g. employment status. Your supervisor's feedback on
-  # the ethics application was "We will be focused on full-time only", which
-  # conflicts with the pre-registration's "full-time or part-time". Confirm which
-  # applies, then set keep_values to the codes you retain.
   categorical_eligibility:
-    - column: Employment
+    # The three screening questions, each 1 = Yes, 2 = No. Each becomes one line
+    # of the participant flow.
+    - column: QID127848235
+      label: Not an Australian citizen or permanent resident
+      keep_values: [1]
+    - column: QID127848233
+      label: Not aged between 25 and 65
+      keep_values: [1]
+    - column: QID127848234
+      label: Not fluent in English
+      keep_values: [1]
+
+    # Employment status: 1 = full-time, 2 = part-time, 3 = self-employed.
+    # Your supervisor's annotation on the ethics application was "We will be
+    # focused on full-time only", which conflicts with the pre-registration's
+    # "full-time or part-time" — and neither anticipated the self-employed
+    # option that the survey actually offered. Confirm, then enable.
+    - column: Q2
       label: Not employed full-time
       keep_values: [1]
       enabled: false
 
-    # Your export contains Q_DataPolicyViolations, which is Qualtrics' own fraud
-    # and bot detection. A non-empty value flags a suspect response and is worth
-    # reporting in Data Cleaning. Set the column name and the codes you keep.
-    - column: Q_DataPolicyViolations
-      label: Flagged by Qualtrics fraud detection
-      keep_values: [0]
-      enabled: false
+  # NO ATTENTION CHECKS EXIST IN THIS DATASET. The ethics application promised
+  # two ("Please select 'Somewhat agree' ... to show you are reading
+  # carefully"), but the data dictionary contains none, so the pre-registered
+  # exclusion cannot be applied. Raise this with your supervisor; the duration
+  # floor above is the only remaining careless-responding screen.
+  attention_checks: []
+  max_attention_check_failures: 0
 
   max_missing_proportion_per_scale: 0.20
 
 scales:
   bullying:
     label: Workplace Bullying (NAQ-R)
-    # Negative Acts Questionnaire-Revised, 22 items, 1 = Never to 5 = Daily,
-    # referring to the last six months (Einarsen et al., 2009).
-    items: [NAQ1, NAQ2, NAQ3, NAQ4, NAQ5, NAQ6, NAQ7, NAQ8, NAQ9, NAQ10, NAQ11,
-            NAQ12, NAQ13, NAQ14, NAQ15, NAQ16, NAQ17, NAQ18, NAQ19, NAQ20, NAQ21,
-            NAQ22]
+    # Negative Acts Questionnaire-Revised, 22 items, positions 150-171.
+    # 1 = Never, 2 = Occasionally, 3 = Monthly, 4 = Weekly, 5 = Daily.
+    # SPSS renamed duplicated Qualtrics tags, hence the .0 / .1 suffixes.
+    items: [Q2.1, Q3.1, Q4.0, Q5.1, Q6.1, Q7.0, Q8.0, Q9.0, Q10.0, Q11.0,
+            Q12.0, Q13.0, Q14.0, Q15.0, Q16.0, Q17.0, Q18.0, Q19.0, Q20.0,
+            Q21.0, Q22, Q23]
     reverse_items: []
     response_range: [1, 5]
-    # The pre-registration specifies the NAQ-R SUM score as the outcome.
     score: sum
 
   openness:
-    label: Openness to Experience (Mini-IPIP6)
-    # UNRESOLVED. The pre-registration specifies the 4-item Mini-IPIP6 Openness
-    # subscale on a 7-point scale (Sibley, 2012). Your export instead contains a
-    # 60-item BFI block (BFI_Q1_ ... BFI_Q60_), which is the length of the BFI-2.
-    # If the BFI-2 was administered in place of the Mini-IPIP6, this becomes its
-    # 12-item Open-Mindedness domain on a 5-point scale, and both the item list
-    # and response_range below change. Resolve this before running anything.
-    items: [OPEN1, OPEN2, OPEN3, OPEN4]
-    reverse_items: [OPEN2, OPEN3, OPEN4]
-    response_range: [1, 7]
+    label: Open-Mindedness (BFI-2)
+    # NOT the pre-registered measure. The survey administered the 60-item BFI-2
+    # (Soto & John, 2017), not the 4-item Mini-IPIP6 Openness subscale. These
+    # are the 12 Open-Mindedness items (BFI-2 items 5, 10, 15 ... 60), verified
+    # against the question text in the data dictionary.
+    # 1 = Disagree strongly ... 5 = Agree strongly (NOT the pre-registered
+    # 7-point scale).
+    items: [BFI_Q5_, BFI_Q10, BFI_Q15_, BFI_Q20__, BFI_Q25__, BFI_Q30__,
+            BFI_Q35_, BFI_Q40_, BFI_Q45_, BFI_Q50__, BFI_Q55_, BFI_Q60_]
+    # Standard BFI-2 negatively keyed Open-Mindedness items, each confirmed
+    # from its wording: few artistic interests / avoids intellectual
+    # discussions / little creativity / difficulty imagining / poetry boring /
+    # little interest in abstract ideas.
+    reverse_items: [BFI_Q5_, BFI_Q25__, BFI_Q30__, BFI_Q45_, BFI_Q50__, BFI_Q55_]
+    response_range: [1, 5]
     score: mean
 
 derived:
-  # The survey asks "Is English your first language?" (Yes/No). The predictor is
-  # dummy coded 0 = native English speaker, 1 = ESL, per the pre-registration.
   ESL:
-    from: EnglishFirstLanguage
+    # The pre-registration described a Yes/No "Is English your first language?"
+    # question. The survey actually asked a 5-level proficiency question (Q5):
+    #   1 = English is my first language, native proficiency
+    #   2 = Not my first language, but native proficiency
+    #   3 = Not my first language, highly fluent
+    #   4 = Not my first language, moderately fluent
+    #   5 = Not my first language, not very fluent
+    # Levels 2-5 all mean "English is not my first language", so ESL = 1 there.
+    # Level 2 is the boundary case worth a sensitivity check.
+    from: Q5
     label: ESL status
-    # VERIFY the numeric codes Qualtrics assigns to Yes and No.
     mapping:
-      1: 0    # Yes, English is my first language -> native speaker
-      2: 1    # No -> ESL
+      1: 0
+      2: 1
+      3: 1
+      4: 1
+      5: 1
     levels:
       0: Native English speaker
       1: ESL speaker
 
+  Age_years:
+    # Q1 is stored as 1-41 with value labels 25-65, so the raw code is NOT the
+    # age. Analysing Q1 directly would understate every age by 24 years.
+    from: Q1
+    label: Age in years
+    offset: 24
+
+value_labels:
+  Gender:
+    1: Woman
+    2: Man
+    3: Non-binary/Gender diverse
+    4: Prefer not to say
+  Employment:
+    1: Employed full-time
+    2: Employed part-time
+    3: Self-employed
+
 demographics:
-  continuous: [Age]
-  categorical: [Gender, ESL]
+  continuous: [Age_years]
+  categorical: [Gender, ESL, Employment]
+
+rename:
+  # Friendlier names applied after screening, so the outputs read sensibly.
+  Q3: Gender
+  Q2: Employment
+  Q6: Industry
 
 analysis:
   model: moderation
@@ -141,19 +178,16 @@ analysis:
   moderator: openness
   covariates: [Gender]
 
-  # Pre-registered: Openness mean-centred, interaction ESL x Openness, simple
-  # slopes probed at -1 SD, the mean, and +1 SD.
   centre_moderator: true
   simple_slopes_sd: [-1, 0, 1]
 
-  # Gender is categorical; this level is the regression reference category.
-  gender_reference: Male
+  dummy_reference:
+    Gender: 2   # Man
 
 thresholds:
-  # Taken from the pre-registered analysis plan rather than generic defaults.
-  vif_max: 4.0                    # pre-registration specifies VIF < 4
-  standardised_skew_kurtosis: 1.96  # pre-registration: standardised value +/- 1.96
+  vif_max: 4.0
+  standardised_skew_kurtosis: 1.96
   mahalanobis_p: 0.001
   cooks_distance_max: 1.0
-  mcar_alpha: 0.05                # < 5% missing on Little's MCAR -> listwise deletion
+  mcar_alpha: 0.05
   alpha_floor: 0.70

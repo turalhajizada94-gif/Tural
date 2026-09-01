@@ -43,12 +43,15 @@ def main() -> None:
 
     n_final = args.n_final
     n_preview, n_noconsent, n_incomplete = 3, 6, 14
-    n_speeder, n_failcheck, n_underage = 7, 5, 4
-    n_total = n_final + n_preview + n_noconsent + n_incomplete + n_speeder + n_failcheck + n_underage
+    n_speeder, n_notcitizen, n_ineligible_age = 7, 5, 4
+    n_total = (
+        n_final + n_preview + n_noconsent + n_incomplete
+        + n_speeder + n_notcitizen + n_ineligible_age
+    )
 
-    # 1 = "Yes, English is my first language" (native), 2 = "No" (ESL).
-    english_first = RNG.choice([1, 2], n_total, p=[0.6, 0.4])
-    esl = (english_first == 2).astype(float)
+    # Q5: 1 = English is my first language; 2-5 = it is not, at decreasing fluency.
+    proficiency = RNG.choice([1, 2, 3, 4, 5], n_total, p=[0.58, 0.12, 0.18, 0.09, 0.03])
+    esl = (proficiency > 1).astype(float)
 
     openness_latent = RNG.normal(0, 1, n_total)
     # Main effect of ESL, plus an interaction: the ESL penalty shrinks as
@@ -79,14 +82,16 @@ def main() -> None:
             "LocationLongitude": RNG.normal(144.9, 0.2, n_total).round(4),
             "DistributionChannel": "anonymous",
             "UserLanguage": "EN",
-            "Consent": 1,
-            "Age": RNG.integers(25, 66, n_total),
-            "Gender": RNG.choice(["Male", "Female", "Non-binary", "Prefer not to say"],
-                                 n_total, p=[0.42, 0.52, 0.04, 0.02]),
-            "Employment": 1,
-            "EnglishFirstLanguage": english_first,
-            "AC1": 5,
-            "AC2": 5,
+            "QID127848236": 1,                              # consent, 1 = Agree
+            "QID127848235": 1,                              # Australian citizen/PR
+            "QID127848233": 1,                              # aged 25-65
+            "QID127848234": 1,                              # fluent in English
+            "Q1": RNG.integers(1, 42, n_total),             # age code; 1 = 25 years
+            "Q2": RNG.choice([1, 2, 3], n_total, p=[0.68, 0.24, 0.08]),  # employment
+            "Q3": RNG.choice([1, 2, 3, 4], n_total, p=[0.52, 0.42, 0.04, 0.02]),  # gender
+            "Q5": proficiency,
+            "Q6": RNG.integers(1, 20, n_total),             # industry
+            "Q_DataPolicyViolations": "",
         }
     )
 
@@ -113,14 +118,13 @@ def main() -> None:
         return idx
 
     df.loc[take(n_preview), "DistributionChannel"] = "preview"
-    df.loc[take(n_noconsent), "Consent"] = 0
+    df.loc[take(n_noconsent), "QID127848236"] = 2
     incomplete = take(n_incomplete)
     df.loc[incomplete, "Finished"] = 0
     df.loc[incomplete, "Progress"] = RNG.integers(15, 95, n_incomplete)
     df.loc[take(n_speeder), "Duration (in seconds)"] = RNG.integers(45, 175, n_speeder)
-    failed = take(n_failcheck)
-    df.loc[failed, "AC1"] = RNG.choice([1, 2, 3, 4], n_failcheck)
-    df.loc[take(n_underage), "Age"] = RNG.integers(18, 25, n_underage)
+    df.loc[take(n_notcitizen), "QID127848235"] = 2
+    df.loc[take(n_ineligible_age), "QID127848233"] = 2
 
     df = df.sample(frac=1, random_state=11).reset_index(drop=True)
 
