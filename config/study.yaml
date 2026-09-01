@@ -1,0 +1,100 @@
+# ---------------------------------------------------------------------------
+# Study configuration — EDIT THIS FILE to match your own survey.
+#
+# Every script reads this file, so once the column names, scales and screening
+# rules here are correct, the participant flow, descriptives, reliabilities and
+# assumption tests all follow automatically.
+#
+# The values below are a worked example sized to a 180-respondent survey. Replace
+# the scale names, item codes and rules with your own.
+# ---------------------------------------------------------------------------
+
+qualtrics:
+  # Data centre id: read it off your Qualtrics URL, e.g. syd1.qualtrics.com -> syd1
+  data_center: syd1
+  # Survey id from Survey -> Tools -> Survey ID, or the SV_... in the editor URL
+  survey_id: SV_REPLACE_ME
+
+columns:
+  # Qualtrics metadata column names. These are the defaults; change only if you
+  # renamed them in the survey.
+  response_id: ResponseId
+  progress: Progress
+  duration: Duration (in seconds)
+  finished: Finished
+  distribution_channel: DistributionChannel
+  start_date: StartDate
+
+  # Identifying columns dropped on import and never written to disk.
+  drop_on_import:
+    - IPAddress
+    - RecipientEmail
+    - RecipientFirstName
+    - RecipientLastName
+    - ExternalReference
+    - LocationLatitude
+    - LocationLongitude
+    - UserLanguage
+
+screening:
+  # Each rule below becomes one line of your participant flow.
+  drop_preview_responses: true      # DistributionChannel == "preview"
+  require_finished: true            # Finished == 1
+  min_progress: 100                 # percent
+  min_duration_seconds: 180         # speeders; set from your own pilot timing
+  max_duration_seconds: null        # e.g. 7200 to drop abandoned-then-resumed cases
+
+  consent:
+    column: Consent
+    required_value: 1
+
+  eligibility:
+    - column: Age
+      min: 18
+      max: null
+
+  attention_checks:
+    - column: AC1
+      correct_value: 4
+  max_attention_check_failures: 0
+
+  # A participant is dropped from a scale if more than this proportion of its
+  # items are missing; at or below it, the remaining items are averaged.
+  max_missing_proportion_per_scale: 0.20
+
+scales:
+  stress:
+    label: Perceived Stress
+    items: [PSS1, PSS2, PSS3, PSS4, PSS5, PSS6]
+    reverse_items: [PSS4, PSS5]
+    response_range: [1, 5]
+    score: mean
+
+  coping:
+    label: Adaptive Coping
+    items: [COP1, COP2, COP3, COP4, COP5]
+    reverse_items: []
+    response_range: [1, 7]
+    score: mean
+
+  wellbeing:
+    label: Psychological Wellbeing
+    items: [WB1, WB2, WB3, WB4, WB5, WB6, WB7, WB8]
+    reverse_items: [WB3, WB7]
+    response_range: [1, 7]
+    score: mean
+
+demographics:
+  # Reported in the sample description; continuous vars also usable as covariates.
+  continuous: [Age]
+  categorical: [Gender, Education]
+
+analysis:
+  # Drives which assumption tests are run. Set model to one of:
+  #   correlation | regression | mediation | moderation
+  model: mediation
+  outcome: wellbeing
+  predictors: [stress]
+  mediator: coping
+  moderator: null
+  covariates: [Age]
