@@ -1,0 +1,34 @@
+# ---------------------------------------------------------------------------
+# PARTICIPANT DATA MUST NEVER BE COMMITTED.
+# This repository is public. Raw and processed Qualtrics exports contain human
+# research data and stay on your machine / approved university storage only.
+# ---------------------------------------------------------------------------
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+!data/**/README.md
+
+*.sav
+*.csv
+*.tsv
+*.xlsx
+*.xls
+*.json
+!config/*.json
+!package.json
+
+# Analysis outputs can embed raw values (e.g. case-level diagnostics)
+output/*
+!output/.gitkeep
+
+# Credentials
+.env
+*.token
+qualtrics_credentials*
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
