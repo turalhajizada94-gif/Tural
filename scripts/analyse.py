@@ -1,13 +1,24 @@
-"""Produce the descriptive, reliability and assumption-testing outputs.
+"""Produce the statistics behind each Results section subsection.
+
+Outputs are grouped to match where the unit requires each statistic to be
+reported, which is not the same as where it feels natural to put it. Per the
+Results Section FAQ, Cronbach's alpha for validated scales and the sample
+demographics belong in the METHOD, while the Preliminary Analyses subsection
+describes the study VARIABLES.
 
 Reads data/processed/analysis_sample.csv and writes to output/:
 
-    descriptives.md         sample description, scale descriptives, reliabilities
-    correlations.csv/.md    intercorrelation matrix with significance stars
-    assumptions.md          every assumption test for the model in study.yaml
-    fig_histograms.png      distribution of each composite
-    fig_residuals.png       residuals vs fitted, and a normal Q-Q plot
-    fig_scatter_matrix.png  linearity check across model variables
+    method_section_stats.md   demographics + reliabilities  -> Method, not Results
+    assumption_testing.md     -> Results subsection 2
+    preliminary_analyses.md   variable descriptives + correlations -> subsection 3
+    inferential_statistics.md effect sizes and CIs -> subsection 4 (scaffold only)
+    correlations.csv          machine-readable matrix
+    fig_histograms.png        distribution of each composite
+    fig_residuals.png         residuals vs fitted, and a normal Q-Q plot
+    fig_scatter_matrix.png    linearity check across model variables
+
+Every table is a working output. Reformat to APA 7th before it goes in the
+manuscript.
 
 Usage:
     python scripts/analyse.py
@@ -31,9 +42,22 @@ from statsmodels.stats.diagnostic import het_breuschpagan
 from statsmodels.stats.outliers_influence import variance_inflation_factor
 from statsmodels.stats.stattools import durbin_watson
 
-from common import OUTPUT_DIR, PROCESSED_DIR, cronbach_alpha, ensure_dirs, load_config
+from common import (
+    OUTPUT_DIR,
+    PROCESSED_DIR,
+    cronbach_alpha,
+    ensure_dirs,
+    load_config,
+    reverse_score,
+)
 
 Z_OUTLIER = 3.29
+ALPHA_FLOOR = 0.70
+
+APA_NOTE = (
+    "> Working output. Reformat as an APA 7th table before it goes in the "
+    "manuscript, and reference it in the text."
+)
 
 
 def stars(p: float) -> str:
@@ -70,18 +94,45 @@ def describe_sample(df: pd.DataFrame, config: dict) -> list[str]:
     return lines
 
 
-def scale_descriptives(df: pd.DataFrame, config: dict) -> pd.DataFrame:
+def scored_items(df: pd.DataFrame, spec: dict) -> pd.DataFrame:
+    """The scale's items as they enter the composite, reversals applied.
+
+    Reversal is recomputed here rather than read from the processed file, so
+    reliability is correct whatever columns that file happens to carry.
+    """
+    reversed_items = spec.get("reverse_items") or []
+    present = [item for item in spec["items"] if item in df.columns]
+    block = df[present].copy()
+    for item in present:
+        if item in reversed_items:
+            block[item] = reverse_score(block[item], spec["response_range"])
+    return block
+
+
+def reliability_table(df: pd.DataFrame, config: dict) -> pd.DataFrame:
+    rows = []
+    for spec in config["scales"].values():
+        block = scored_items(df, spec)
+        if block.empty or block.shape[1] < 2:
+            continue
+        alpha = cronbach_alpha(block)
+        rows.append(
+            {
+                "Scale": spec["label"],
+                "Items": block.shape[1],
+                "α": round(alpha, 2),
+                "Below .70": "YES — contact supervisor" if alpha < ALPHA_FLOOR else "no",
+            }
+        )
+    return pd.DataFrame(rows)
+
+
+def variable_descriptives(df: pd.DataFrame, config: dict) -> pd.DataFrame:
     rows = []
     for name, spec in config["scales"].items():
         if name not in df.columns:
             continue
         values = df[name].dropna()
-        items = [i for i in spec["items"] if i in df.columns]
-        scored = []
-        for item in items:
-            scored.append(f"{item}_r" if item in (spec.get("reverse_items") or []) else item)
-        scored = [c for c in scored if c in df.columns]
-
         rows.append(
             {
                 "Variable": spec["label"],
@@ -92,7 +143,6 @@ def scale_descriptives(df: pd.DataFrame, config: dict) -> pd.DataFrame:
                 "Max": round(values.max(), 2),
                 "Skew": round(stats.skew(values, bias=False), 2),
                 "Kurtosis": round(stats.kurtosis(values, bias=False), 2),
-                "α": round(cronbach_alpha(df[scored]), 2) if scored else np.nan,
             }
         )
     return pd.DataFrame(rows)
@@ -115,6 +165,106 @@ def correlation_matrix(df: pd.DataFrame, variables: list[str]) -> tuple[pd.DataF
             display.iloc[j, i] = cell
             display.iloc[i, j] = ""
     return r_mat, display
+
+
+def correlation_details(df: pd.DataFrame, variables: list[str]) -> pd.DataFrame:
+    """Pairwise correlations with 95% CIs, via the Fisher z transformation.
+
+    APA 7th expects effect sizes with confidence intervals; r is itself the effect
+    size, so the CI is what needs adding.
+    """
+    rows = []
+    for i, first in enumerate(variables):
+        for second in variables[i + 1 :]:
+            pair = df[[first, second]].dropna()
+            n = len(pair)
+            if n < 4:
+                continue
+            r, p = stats.pearsonr(pair[first], pair[second])
+            z = np.arctanh(r)
+            se = 1 / np.sqrt(n - 3)
+            lo, hi = np.tanh(z - 1.96 * se), np.tanh(z + 1.96 * se)
+            rows.append(
+                {
+                    "Pair": f"{first} – {second}",
+                    "n": n,
+                    "r": round(r, 2),
+                    "95% CI": f"[{lo:.2f}, {hi:.2f}]",
+                    "p": f"{p:.3f}" if p >= 0.001 else "<.001",
+                }
+            )
+    return pd.DataFrame(rows)
+
+
+def inferential_scaffold(df: pd.DataFrame, config: dict) -> tuple[list[str], object]:
+    """OLS with the effect sizes and confidence intervals APA 7th requires.
+
+    This is a scaffold, not your reported analysis: the model has to follow the
+    data analysis plan agreed with your supervisor. Mediation and moderation in
+    particular need bootstrapped indirect effects (e.g. PROCESS).
+    """
+    analysis = config["analysis"]
+    outcome = analysis["outcome"]
+    predictors = [v for v in model_variables(config) if v != outcome and v in df.columns]
+
+    complete = df[predictors + [outcome]].dropna()
+    y = complete[outcome]
+    X = sm.add_constant(complete[predictors])
+    fit = sm.OLS(y, X).fit()
+
+    r2, adj_r2 = fit.rsquared, fit.rsquared_adj
+    f2 = r2 / (1 - r2) if r2 < 1 else np.nan
+
+    z = complete.apply(lambda c: (c - c.mean()) / c.std(ddof=1))
+    std_fit = sm.OLS(z[outcome], sm.add_constant(z[predictors])).fit()
+
+    ci = fit.conf_int()
+    rows = []
+    for name in predictors:
+        rows.append(
+            {
+                "Predictor": name,
+                "b": round(fit.params[name], 3),
+                "SE": round(fit.bse[name], 3),
+                "95% CI for b": f"[{ci.loc[name, 0]:.3f}, {ci.loc[name, 1]:.3f}]",
+                "β": round(std_fit.params[name], 3),
+                "t": round(fit.tvalues[name], 2),
+                "p": f"{fit.pvalues[name]:.3f}" if fit.pvalues[name] >= 0.001 else "<.001",
+            }
+        )
+
+    lines = [
+        "# Inferential statistics (scaffold)",
+        "",
+        f"**Model in `config/study.yaml`:** {analysis['model']} — {outcome} regressed on "
+        f"{', '.join(predictors)} (n = {len(complete)}).",
+        "",
+        "> This runs an ordinary least squares model so the effect sizes and "
+        "confidence intervals are in front of you. It is **not** your reported "
+        "analysis. Use the model agreed in your data analysis plan, and for "
+        "mediation or moderation use PROCESS or an equivalent with bootstrapped "
+        "indirect effects.",
+        "",
+        "## Overall model",
+        "",
+        f"- F({int(fit.df_model)}, {int(fit.df_resid)}) = {fit.fvalue:.2f}, "
+        f"p = {fit.f_pvalue:.4f}" if fit.f_pvalue >= 0.0001 else
+        f"- F({int(fit.df_model)}, {int(fit.df_resid)}) = {fit.fvalue:.2f}, p < .001",
+        f"- R² = {r2:.3f}, adjusted R² = {adj_r2:.3f}",
+        f"- Cohen's f² = {f2:.3f} "
+        f"({'small' if f2 < 0.15 else 'medium' if f2 < 0.35 else 'large'} by conventional benchmarks)",
+        "",
+        "## Coefficients",
+        "",
+        pd.DataFrame(rows).to_markdown(index=False),
+        "",
+        APA_NOTE,
+        "",
+        "Report non-significant predictors as fully as significant ones, and keep "
+        "interpretation of what the findings *mean* for the Discussion.",
+        "",
+    ]
+    return lines, fit
 
 
 def model_variables(config: dict) -> list[str]:
@@ -237,14 +387,16 @@ def assumption_report(df: pd.DataFrame, config: dict) -> tuple[list[str], object
         "- **Linearity**: inspect `fig_residuals.png` and `fig_scatter_matrix.png`; "
         "residuals should show no systematic pattern around zero.",
         "",
-        "## 7. Model summary",
+        "## If an assumption is violated",
         "",
-        "Reported here only as a check that the model runs. Write the inferential "
-        "results up following the PSY4401 conventions.",
+        "Per the Results Section FAQ: consider the data from multiple perspectives "
+        "(statistical tests, visual checks, and your own understanding of the "
+        "variables), and discuss it with your supervisor **before** making dramatic "
+        "changes such as transformations. A non-parametric alternative may be a "
+        "better solution, or you may proceed as planned and acknowledge the impact "
+        "later in the manuscript.",
         "",
-        "```",
-        str(fitted.summary()),
-        "```",
+        APA_NOTE,
         "",
     ]
     return lines, fitted
@@ -313,37 +465,86 @@ def main() -> None:
     ensure_dirs()
     df = pd.read_csv(args.input)
 
-    desc_lines = ["# Descriptive statistics", ""] + describe_sample(df, config)
-    table = scale_descriptives(df, config)
-    desc_lines += ["## Scale descriptives and reliability", "", table.to_markdown(index=False), ""]
+    # --- Method section material (NOT the Results) ---------------------------
+    alphas = reliability_table(df, config)
+    method_lines = [
+        "# Statistics that belong in the METHOD section",
+        "",
+        "> Per the Results Section FAQ, both of these are reported in the Method, "
+        "not the Results. Cronbach's alpha moves into the Results only if your "
+        "study develops or refines a scale; demographics move only if they bear "
+        "directly on hypothesis testing.",
+        "",
+        "## Reliability of scales — Method, Measures subsection",
+        "",
+        alphas.to_markdown(index=False),
+        "",
+    ]
+    low = alphas[alphas["α"] < ALPHA_FLOOR] if not alphas.empty else alphas
+    if not low.empty:
+        method_lines += [
+            f"**Contact your supervisor before running your analysis.** "
+            f"{len(low)} scale(s) fell below the conventionally accepted .70: "
+            + ", ".join(low["Scale"]),
+            "",
+        ]
+    method_lines += ["## Sample description — Method, Participants subsection", ""]
+    method_lines += describe_sample(df, config)[2:]
+    (OUTPUT_DIR / "method_section_stats.md").write_text("\n".join(method_lines) + "\n")
 
+    # --- Results subsection 2: Assumption Testing ----------------------------
+    assumption_lines, fitted = assumption_report(df, config)
+    (OUTPUT_DIR / "assumption_testing.md").write_text("\n".join(assumption_lines) + "\n")
+
+    # --- Results subsection 3: Preliminary Analyses --------------------------
+    descriptives = variable_descriptives(df, config)
     variables = [v for v in model_variables(config) if v in df.columns]
     r_mat, display = correlation_matrix(df, variables)
     r_mat.round(3).to_csv(OUTPUT_DIR / "correlations.csv")
 
-    corr_lines = [
-        "# Intercorrelations",
+    prelim_lines = [
+        "# Preliminary Analyses (Descriptive Statistics)",
+        "",
+        f"N = {len(df)}. These describe the **study variables**; the sample "
+        "description sits in the Method.",
+        "",
+        "## Descriptive statistics",
+        "",
+        descriptives.to_markdown(index=False),
+        "",
+        "## Intercorrelations",
         "",
         display.to_markdown(),
         "",
         "`* p < .05, ** p < .01, *** p < .001` (two-tailed Pearson, pairwise deletion)",
         "",
+        "### With confidence intervals",
+        "",
+        correlation_details(df, variables).to_markdown(index=False),
+        "",
+        "> Correlations belong here only if they are preliminary to a hypothesised "
+        "model. If the relationships between variables *are* your hypothesis test, "
+        "move them to Inferential Statistics. Check the correlation type suits the "
+        "measurement level of your variables.",
+        "",
+        APA_NOTE,
+        "",
     ]
-    (OUTPUT_DIR / "correlations.md").write_text("\n".join(corr_lines) + "\n")
+    (OUTPUT_DIR / "preliminary_analyses.md").write_text("\n".join(prelim_lines) + "\n")
 
-    desc_lines += ["## Intercorrelations", "", display.to_markdown(), "",
-                   "`* p < .05, ** p < .01, *** p < .001`", ""]
-    (OUTPUT_DIR / "descriptives.md").write_text("\n".join(desc_lines) + "\n")
-
-    assumption_lines, fitted = assumption_report(df, config)
-    (OUTPUT_DIR / "assumptions.md").write_text("\n".join(assumption_lines) + "\n")
+    # --- Results subsection 4: Inferential Statistics ------------------------
+    inferential_lines, _ = inferential_scaffold(df, config)
+    (OUTPUT_DIR / "inferential_statistics.md").write_text("\n".join(inferential_lines) + "\n")
 
     make_figures(df, config, fitted)
 
-    print(table.to_string(index=False))
-    print()
+    print("Reliabilities (-> Method):")
+    print(alphas.to_string(index=False))
+    print("\nStudy variable descriptives (-> Preliminary Analyses):")
+    print(descriptives.to_string(index=False))
+    print("\nIntercorrelations:")
     print(display.to_string())
-    print(f"\nWrote descriptives, correlations, assumptions and 3 figures to {OUTPUT_DIR}/")
+    print(f"\nWrote 4 reports, correlations.csv and 3 figures to {OUTPUT_DIR}/")
 
 
 if __name__ == "__main__":
