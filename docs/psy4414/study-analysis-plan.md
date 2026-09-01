@@ -18,7 +18,7 @@ pre-registered rather than a generic one.
 | Study type | Quasi-experimental, cross-sectional, self-report questionnaire |
 | Predictor (IV) | ESL status — "Is English your first language?" Yes/No, dummy coded **0 = native, 1 = ESL** |
 | Outcome (DV) | Workplace bullying — NAQ-R **sum** score, 22 items, 1 = Never to 5 = Daily, last six months |
-| Moderator | Openness to Experience — Mini-IPIP6 Openness subscale, 4 items, 7-point Likert, **mean-centred** |
+| Moderator | Openness — pre-registered as Mini-IPIP6 (4 items, 7-point); **actually administered as the BFI-2 Open-Mindedness domain** (12 items, 5-point), **mean-centred** |
 | Covariate | Gender (the only pre-registered covariate; age is demographic, not a covariate) |
 | Recruitment | Prolific (paid) and LinkedIn (snowball) |
 | Eligibility | Aged 25+, employed in Australia — see the conflict flagged below |
@@ -58,172 +58,202 @@ pipeline reports ±1.96 standardised skew and VIF < 4 rather than the more commo
 ±2 and VIF < 10. Report against what you pre-registered.
 
 ---
+## What your dataset actually contains
 
-## What your SPSS dataset actually contains
+Resolved from the SPSS data dictionary (`DISPLAY DICTIONARY`, 176 variables,
+1 September 2026 export). The column names are now in `config/study.yaml`, so
+the pipeline reads your real data without further mapping.
 
-Read from the 176-variable list in your SPSS Variable View. The counts below are
-arithmetically consistent with the full list, so the block structure is solid even
-though the variable names themselves are uninformative.
-
-| Rows | Variables | What it is |
+| Positions | Variables | Content |
 | --- | --- | --- |
-| 1–17 | 17 | Standard Qualtrics metadata (`StartDate` … `UserLanguage`) |
-| 18–21 | 4 | `QID12784…` — most likely consent or a screening block |
-| 22–41 | 20 | `Q1`, `Q2`, `Q3`, `Q4_1`–`Q4_15`, `Q5`, `Q6` — demographics plus a 15-option question |
-| 42–62 | 21 | `Q1.0`–`Q21` — a 21-item instrument |
-| 63–122 | **60** | `BFI_Q1_`–`BFI_Q60_` — a 60-item Big Five inventory |
-| 123–149 | 27 | `Part_A._1`–`Part_C._9` — a three-part, 9-items-each measure |
-| 150–171 | **22** | `Q2.1`–`Q23` — a 22-item instrument |
-| 172 | 1 | `Q_DataPolicyViolations` — Qualtrics fraud/bot detection |
-| 173–176 | 4 | `FL_11_DO_…` — survey flow display-order variables from the randomiser |
+| 1–17 | 17 | Qualtrics metadata |
+| 18 | 1 | `QID127848236` — consent (1 = Agree, 2 = Disagree) |
+| 19–21 | 3 | Screeners: Australian citizen/PR, aged 25–65, fluent in English (each 1 = Yes) |
+| 22–24 | 3 | `Q1` age code, `Q2` employment status, `Q3` gender |
+| 25–39 | 15 | `Q4_1`–`Q4_15` — ethnicity, multi-select |
+| 40–41 | 2 | `Q5` English proficiency, `Q6` industry |
+| 42–62 | 21 | **DASS-21** — another project's measure |
+| 63–122 | 60 | **BFI-2** — contains your moderator |
+| 123–149 | 27 | **Short Dark Triad** (Machiavellianism, Narcissism, Psychopathy) — another project |
+| 150–171 | 22 | **NAQ-R** — your outcome |
+| 172 | 1 | `Q_DataPolicyViolations` (a string field, not numeric) |
+| 173–176 | 4 | Block randomiser display order: MentalState, BigFiveinventory, AdditionalTendencies, NegativeActs |
 
-Four things follow from this.
+### Your two measures
 
-**This is a shared battery, not your survey.** Five distinct instrument blocks are
-present, far more than your two measures. That fits the pre-registration, which
-lists Helena Selber, Remedios Bagang and Katerina Karamelis as joint recruiters —
-several students' projects were evidently combined into one Qualtrics survey. Most
-of these 176 columns are not yours, and your first job is working out which are.
+**Outcome — NAQ-R, positions 150–171.** All 22 items confirmed from their
+wording, from "Someone withholding information which affects your performance"
+through to "Threats of violence or physical or actual abuse". Coded 1 = Never,
+2 = Occasionally, 3 = Monthly, 4 = Weekly, 5 = Daily, which is the correct NAQ-R
+scale. Summed as pre-registered, giving a possible range of 22–110.
 
-**The 22-item block at rows 150–171 is very probably your NAQ-R.** It is the only
-22-variable block, and the NAQ-R has exactly 22 items.
+Note the variable names are `Q2.1`, `Q3.1`, `Q4.0`, `Q5.1`, `Q6.1`, `Q7.0` …
+`Q21.0`, `Q22`, `Q23`. SPSS appended `.0`/`.1` because the export reused tags
+across blocks, so `Q4` (position 45) is a DASS-21 item while `Q4.0` (position
+152) is the NAQ-R item. Selecting the wrong one is an easy and silent mistake.
 
-**There is a 60-item Big Five inventory where your 4-item Mini-IPIP6 should be.**
-This is the serious one, and it is discussed as its own point below.
+**Moderator — BFI-2 Open-Mindedness, 12 items.** These are BFI-2 items 5, 10,
+15, 20, 25, 30, 35, 40, 45, 50, 55 and 60, which appear as `BFI_Q5_`, `BFI_Q10`,
+`BFI_Q15_`, `BFI_Q20__`, `BFI_Q25__`, `BFI_Q30__`, `BFI_Q35_`, `BFI_Q40_`,
+`BFI_Q45_`, `BFI_Q50__`, `BFI_Q55_`, `BFI_Q60_`. The trailing underscores vary
+between one and two and are part of the actual names.
 
-**Two variables you should use that you probably were not planning to.**
-`Q_DataPolicyViolations` is Qualtrics' own fraud and bot detection — a genuine data
-cleaning input, and a defensible exclusion criterion worth reporting.
-`FL_11_DO_…` records the randomised block display order, which is exactly the
-counterbalancing your pre-registration described; it lets you actually test for
-order effects rather than just asserting you controlled for them.
-
-### Resolve the column names before anything else
-
-Export tags like `Q4_11` and `Q13.0` say nothing about what was asked. The
-question text does, and it is already in your files: row 2 of a Qualtrics CSV
-export, and the variable **labels** of your `.sav`. Run:
-
-```bash
-python scripts/inspect_export.py
-```
-
-This writes `output/codebook.md`, pairing every column with its question text,
-grouping consecutive columns into blocks, and matching known instruments by
-wording. To pin down a single item:
-
-```bash
-python scripts/inspect_export.py --search "level of competence"
-```
-
-If you would rather stay in SPSS, `DISPLAY DICTIONARY.` prints names, labels and
-value labels for the whole file.
-
-Note also that names like `Q1.0`, `Q5.1` and `Q13.0` are SPSS renaming duplicates
-on import, because the export contained repeated tags across blocks. Be careful you
-are picking up items from the block you intend.
+Each was verified from its question text, and the six negatively keyed items are
+the standard set (5, 25, 30, 45, 50, 55): "has few artistic interests", "avoids
+intellectual, philosophical discussions", "has little creativity", "has
+difficulty imagining things", "thinks poetry and plays are boring", "has little
+interest in abstract ideas". Response scale is 1 = Disagree strongly to
+5 = Agree strongly.
 
 ---
 
-## Six things to settle with your supervisor before you write
+## Seven things to settle with your supervisor before you write
 
-These came out of reading the three submissions side by side. Each one could cost
-marks under the rubric's "Knowledge and Alignment" criterion, which rewards
-results that are explicitly linked to the stated objectives.
+### 1. Your moderator is not the measure you pre-registered — confirmed
 
-### 1. Your moderator may not be the measure you pre-registered
+You pre-registered the **4-item Mini-IPIP6 Openness subscale on a 7-point
+scale**. The survey administered the **60-item BFI-2**, and the Mini-IPIP6
+appears nowhere in the 176 variables. So your moderator is the **12-item
+Open-Mindedness domain on a 5-point scale**.
 
-You pre-registered the **4-item Mini-IPIP6 Openness subscale** on a 7-point scale
-(Sibley, 2012). Your dataset contains a **60-item** `BFI_Q1_`–`BFI_Q60_` block. Sixty
-items is the length of the BFI-2 (Soto & John, 2017), whose Open-Mindedness domain
-is 12 items on a 5-point scale. Four consecutive Openness items are not obviously
-anywhere in the list.
+This is not fatal — the BFI-2 is the better instrument, and 12 items will be more
+reliable than 4 — but it is a change of measure with consequences you need to
+handle deliberately:
 
-Three possibilities, and you need to establish which before you compute anything:
+- Your **Method section** currently describes the Mini-IPIP6 and must be rewritten.
+- Your **construct** shifts slightly. Mini-IPIP6 Openness and BFI-2
+  Open-Mindedness are close but not identical, and the Introduction's
+  theoretical argument about cognitive flexibility should be checked against
+  what Open-Mindedness actually measures.
+- Ask your supervisor whether this belongs in the **Substantial Deviation Events
+  Declaration**. The guidelines class a "moderate" issue as manageable and not
+  requiring declaration, and "major" as including major changes to methods. A
+  swapped personality instrument sits on the boundary, and this is your
+  supervisor's call, not yours.
+- The pre-registration's Mini-IPIP6 citation (Sibley, 2012) must be replaced
+  with the BFI-2 source (Soto & John, 2017).
 
-1. **The BFI-2 replaced the Mini-IPIP6.** Then your moderator is a 12-item domain
-   on a different response scale, your Method section is wrong as written, and this
-   is a change of measure to discuss with your supervisor — including whether it
-   belongs in the Substantial Deviation Events Declaration.
-2. **The BFI block belongs to another student** in the shared battery and your
-   Mini-IPIP6 items are inside one of the unidentified blocks (rows 22–62 or
-   123–149). Then nothing has changed and you just need the right column names.
-3. **The Mini-IPIP6 was never administered.** That is a major deviation and needs
-   raising with your supervisor immediately.
+### 2. There are no attention checks in the dataset
 
-`scripts/inspect_export.py` distinguishes these in one run: it searches for the
-distinctive Mini-IPIP6 wording ("vivid imagination", "not interested in abstract
-ideas") and for BFI-2 wording ("I am someone who…"), and reports which blocks
-matched. Until this is settled, the `openness` scale in `config/study.yaml` is
-deliberately left as a placeholder rather than guessing.
+Your ethics application committed to two: *"two non-intrusive attention check
+questions will be embedded within the survey flow (e.g., 'Please select
+Somewhat agree for this question to show you are reading carefully'), and
+participants who fail these checks will be excluded from the final analysis to
+preserve data quality."*
 
-This is the single highest-priority item on this page. Everything downstream —
-the reliability you report, the mean-centring, the interaction term, the simple
-slopes — depends on knowing which items form the moderator.
+No such variables exist in the data dictionary. The only similar item is the
+consent question, which asks you to select "agree" but serves a different
+purpose.
 
-### 2. Your H2 is worded two different ways
+Two consequences. First, a **pre-registered exclusion criterion cannot be
+applied**, which needs acknowledging rather than quietly dropping. Second, you
+lose your main defence against careless responding in a **paid Prolific sample**,
+where that risk is highest. What remains is completion time, `Progress`, and
+`Q_DataPolicyViolations` (Qualtrics' own fraud detection — note it is a *string*
+field, so screen it for non-empty values rather than comparing it to a number).
+Discuss with your supervisor what a defensible data-quality screen looks like now.
+
+### 3. Your ESL variable is a five-level proficiency item, not Yes/No
+
+The pre-registration describes asking *"Is English your first language?"*
+(Yes/No). `Q5` actually asks about spoken English proficiency with five options:
+
+| Code | Label |
+| --- | --- |
+| 1 | English is my first language. I have native English speaker proficiency. |
+| 2 | English is not my first language. However, I have native English speaker proficiency. |
+| 3 | English is not my first language. I am highly fluent in English. |
+| 4 | English is not my first language. I am moderately fluent in English. |
+| 5 | English is not my first language. I am not very fluent in English. |
+
+The pipeline codes ESL = 0 for level 1 and ESL = 1 for levels 2–5, which matches
+the pre-registered construct ("is English your first language"). Two things to
+raise:
+
+- **Level 2 is a genuine boundary case** — not a first language, but native
+  proficiency. Under Victim Precipitation Theory your mechanism runs through
+  perceived linguistic markers, so someone with native proficiency arguably is
+  not exposed to the risk you theorised. A sensitivity analysis excluding or
+  reclassifying level 2 would strengthen the paper.
+- **You could use the full five-level variable** as an ordinal measure of
+  proficiency, which is closer to your theory than a binary split. That is a
+  deviation from the pre-registered analysis, so it would be a supplementary
+  analysis rather than your primary test.
+
+### 4. A range-restriction problem worth naming in the Discussion
+
+Screener `QID127848234` asked *"Are you fluent in English?"* and non-fluent
+respondents were excluded. But your hypothesis is that limited English
+proficiency creates structural vulnerability to bullying — so the eligibility
+criterion systematically removes the group your theory predicts is **most** at
+risk.
+
+This does not invalidate anything, but it restricts range on the predictor and
+biases the ESL effect towards zero. It is a real limitation, you should say so
+in the Discussion, and it is worth checking how many respondents selected `Q5`
+level 4 or 5 to see how much of the range survived.
+
+### 5. Your H2 is worded two different ways
 
 The Introduction and the pre-registration both state H2 **directionally**: the
 relationship will be *"significantly weaker"* at higher Openness. The ethics
-application states it **non-directionally**: the relationship *"will significantly
-differ based on levels of Openness (low, average, and high)"*.
+application states it **non-directionally**: the relationship *"will
+significantly differ based on levels of Openness (low, average, and high)"*.
 
-This matters because the Results Section FAQ specifically warns that a mismatch
-between your hypothesis, your design and your analysis can be considered in
-grading, and asks you to confirm the wording with your supervisor. It also decides
-whether a one- or two-tailed test is defensible. Pick one wording, use it on the
-first page of your Results, and make sure the Introduction matches.
+The Results Section FAQ warns specifically that a mismatch between your
+hypothesis, design and analysis can be considered in grading, and asks you to
+confirm the wording with your supervisor. It also decides whether a one- or
+two-tailed test is defensible. Pick one, use it on the first page of your
+Results, and make the Introduction match.
 
-### 3. Full-time only, or full-time and part-time?
+### 6. Full-time only, full-time and part-time, or self-employed too?
 
-The pre-registration and the ethics application both say *"full-time or
-part-time"*. Your supervisor annotated the ethics application twice with *"We will
-be focused on full-time only"* (comments 5.1 and 9.1).
+The pre-registration and ethics application both say *"full-time or part-time"*.
+Your supervisor annotated the ethics application twice with *"We will be focused
+on full-time only"*. The survey then offered a **third** option nobody
+anticipated: `Q2` is 1 = Employed full-time, 2 = Employed part-time,
+3 = Self-employed.
 
-If full-time only is the rule, it is an eligibility screen that has to appear as a
-line in your participant flow, and it will reduce your N. `config/study.yaml` has
-a `categorical_eligibility` rule ready for this, currently `enabled: false` —
-switch it on and set the column and codes once you have decided.
+Self-employed respondents are a conceptual problem for a workplace bullying
+study, since many have no colleagues or supervisor. Whatever you decide becomes
+a line in your participant flow. `config/study.yaml` has the full-time-only rule
+ready and currently disabled.
 
-### 4. Expect the interaction to be hard to detect, and say so in advance
+### 7. Expect the interaction to be hard to detect, and say so in advance
 
-Your own power analysis is candid about this: Dåderman and Basinska (2021)
-reported interaction effects around *f*² ≈ 0.016, which would need N > 606. You
-powered instead for a medium effect (*f*² = 0.15, power .95, α .05), giving a
-minimum N = 107. With 180 responses you are comfortably powered for the **main
-effects**, and underpowered for a small interaction.
+Your own power analysis is candid: Dåderman and Basinska (2021) reported
+interaction effects around *f*² ≈ 0.016, needing N > 606. You powered for a
+medium effect (*f*² = 0.15, power .95, α .05), giving a minimum N = 107. With 180
+responses you are comfortably powered for the **main effect** and underpowered
+for a small interaction.
 
-So H1 is a fair test, and a non-significant H2 would be an entirely expected
-outcome rather than a failure. The FAQ is explicit that non-significant findings
-are reported objectively and in full. Do not go looking for a significant
-interaction; report what you find and let the Discussion handle the power
-limitation.
+H1 is therefore a fair test, and a non-significant H2 is an expected outcome
+rather than a failure. The FAQ is explicit that non-significant findings are
+reported objectively and in full. Report what you find and let the Discussion
+handle the power limitation.
 
-### 5. Skip logic means you should expect item-level missingness
+### And one thing that would have silently corrupted your results
 
-The ethics application says skip logic was enabled so participants could bypass
-any question. Your supervisor's comment 4.1 pushes the other way: *"Participants
-are required to answer all questions, otherwise, we will not have valid data to
-analyse."*
+`Q1` (age) is stored as codes **1 to 41**, with value labels 25 to 65. The raw
+code is not the age: someone coded `1` is 25 years old. Anything computed
+straight from `Q1` — a mean age for your sample description, or age as a
+covariate — would be wrong by exactly 24 years. The pipeline derives
+`Age_years = Q1 + 24` and reports the resulting range so you can eyeball it.
 
-Whichever was implemented, check the actual missingness in your export. If skip
-logic was live, Little's MCAR does real work in your Data Cleaning subsection, and
-your pre-registered rule (listwise under 5%, multiple imputation over) decides what
-happens next. `scripts/analyse.py` runs Little's MCAR and tells you which branch
-your data falls on.
-
-### 6. Do not put the NAQ-R or Mini-IPIP6 in your appendix
-
-Your ethics application listed the NAQ-R as Appendix A and the Mini-IPIP6 as
-Appendix B, which was right for that submission. The Journal Manuscript guidelines
-say the opposite: *"Do not include already published measures in the appendix as
-this can be a breach of copyright. Only include the scales used for your study if
-they are novel measures you have developed."* Both of your measures are published,
-so neither goes in the manuscript appendix.
+The same trap appears in the DASS-21 block, stored 1–4 but labelled 0–3. That is
+not your measure, but if you ever borrow those items, check the coding. Your
+NAQ-R items are stored 1–5 matching Never–Daily, so they need no adjustment.
 
 ---
+## Three things carried over from your earlier submissions
 
-## Two more things carried over from your earlier submissions
+**Do not put the NAQ-R or the BFI-2 in your appendix.** Your ethics application
+listed the NAQ-R as Appendix A and the Mini-IPIP6 as Appendix B, which was right
+for that submission. The Journal Manuscript guidelines say the opposite: *"Do not
+include already published measures in the appendix as this can be a breach of
+copyright. Only include the scales used for your study if they are novel measures
+you have developed."* Both measures you actually used are published, so neither
+belongs in the manuscript appendix.
 
 **Your data cleaning has to mention the IP addresses.** Your supervisor corrected
 the ethics claim that IP addresses are never collected: *"Qualtrics record IP
@@ -260,12 +290,16 @@ python scripts/analyse.py
 python scripts/hypothesis_tests.py
 ```
 
-### Watch the Openness reliability
+### Reliability
 
-The Mini-IPIP6 Openness subscale is only four items, so its Cronbach's alpha may
-well fall below .70. The FAQ says to contact your supervisor **before** running
-your analysis if that happens, not after. `method_section_stats.md` flags it
-explicitly if it does.
+Now that the moderator is the 12-item BFI-2 Open-Mindedness domain rather than a
+4-item subscale, its Cronbach's alpha is much less likely to be a problem. The
+pipeline still checks: if any scale falls below .70, `method_section_stats.md`
+says so explicitly, and the FAQ requires you to contact your supervisor **before**
+running the analysis rather than after.
+
+Both alphas belong in the **Method**, Measures subsection — not the Results —
+because both are previously validated scales.
 
 ### And remember where the output file has to come from
 
