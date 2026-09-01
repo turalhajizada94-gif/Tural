@@ -8,6 +8,7 @@ including the final manuscript.
 
 | Document | What it covers |
 | --- | --- |
+| [Results section requirements](results-section-requirements.md) | **Authoritative.** Consolidated from the rubric, submission guidelines and FAQ |
 | [Qualtrics export guide](qualtrics-export-guide.md) | How to move survey data out of Qualtrics, and which variables are required |
 | [Assessment 1 — Research Portfolio](assessment-1-research-portfolio.md) | The no-submission portfolio item and how it is graded |
 | [Assessment 2 — Results Section](assessment-2-results-section.md) | Requirements, word limits, quant/qual guidance, helpful hints |
@@ -26,7 +27,12 @@ including the final manuscript.
 
 ## A note on sourcing
 
-These notes are derived from an auto-transcribed video, so unit codes and figures
-were spoken rather than written. Anything ambiguous in the audio is flagged inline
-with a "verify" note. Where the notes and the official unit materials disagree,
-the Moodle site, the assessment brief, and your supervisor take precedence.
+Two kinds of document are mixed here. The **requirements** page is drawn from
+official unit materials: the marking rubric, the GDPA submission guidelines (v4),
+the Results Section FAQ, and the Results Section Workbook. Everything else derives
+from an auto-transcribed walkthrough video, where unit codes and figures were
+spoken rather than written; anything ambiguous in the audio is flagged inline with
+a "verify" note.
+
+Where the two disagree, the official documents win, and the Moodle assessment page
+and your supervisor override both.

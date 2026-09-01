@@ -44,6 +44,7 @@ export so you can watch the whole workflow run.
 
 ## Documentation
 
+- [Results section requirements](docs/psy4414/results-section-requirements.md) — start here; consolidated from the rubric, submission guidelines and FAQ
 - [Getting your Qualtrics data out, and which data you need](docs/psy4414/qualtrics-export-guide.md)
 - [Assessment 2 — Results Section](docs/psy4414/assessment-2-results-section.md)
 - [Results section checklist](docs/psy4414/results-section-checklist.md)

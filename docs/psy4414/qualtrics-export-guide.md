@@ -151,14 +151,21 @@ python scripts/analyse.py              # descriptives, correlations, assumptions
 
 Outputs land in `output/`:
 
-| File | Feeds which part of the results section |
+Outputs are named for the section they feed, and note that two of them feed the
+**Method**, not the Results:
+
+| File | Goes into |
 | --- | --- |
-| `participant_flow.md` | Participant flow, with a draft paragraph you can edit |
-| `data_cleaning_report.md` | Data cleaning: reverse scoring, out-of-range values, prorating |
-| `descriptives.md` | Sample description, scale descriptives, Cronbach's alpha |
-| `correlations.md` / `.csv` | The intercorrelation matrix required for mediation/moderation |
-| `assumptions.md` | Every assumption test, ready to be written up |
+| `method_section_stats.md` | **Method** — Cronbach's alpha (validated scales) and the sample description |
+| `participant_flow.md` | Results → Data Cleaning, with a draft paragraph you can edit |
+| `data_cleaning_report.md` | Results → Data Cleaning: reverse scoring, out-of-range values, prorating |
+| `assumption_testing.md` | Results → Assumption Testing |
+| `preliminary_analyses.md` | Results → Preliminary Analyses: study-variable descriptives and intercorrelations with CIs |
+| `inferential_statistics.md` | Results → Inferential Statistics — **scaffold only**, with effect sizes and CIs |
 | `fig_histograms.png`, `fig_residuals.png`, `fig_scatter_matrix.png` | Visual assumption evidence, and candidate figures |
+
+Every table is a working output. Reformat to APA 7th before it goes in the
+manuscript, and reference each table and figure in the text.
 
 ### Trying it before your data is ready
 
@@ -172,13 +179,44 @@ you work with your real data so the two can never be confused.
 
 ---
 
-## Part 4 — What the scripts deliberately leave to you
+## Part 4 — Important: the submitted output file most likely needs to be SPSS
 
-They stop short of the inferential analysis, because the model has to match the
-data analysis plan you agreed with your supervisor, and because your DAP feedback
-should drive it. `config/study.yaml` records which model you intend (`correlation`,
-`regression`, `mediation`, `moderation`) so the right assumption tests run, and
-`assumptions.md` prints a basic OLS fit as a sanity check — but treat that as
+Read this before deciding to do your analysis in Python.
+
+The submission guidelines say a quantitative output file "will likely include SPSS
+output and syntax", and point to a supplement specifically about SPSS output. The
+FAQ goes further and says to include **the syntax boxes produced with the output**,
+because that is what lets the marker verify the analyses you conducted.
+
+This pipeline produces markdown reports and PNG figures. Those are genuinely useful
+— for checking your screening logic, seeing your assumption tests early, and
+drafting numbers into the manuscript — but they are **not** SPSS output with syntax
+boxes, and submitting them as your output file is a decision to run past your
+supervisor first.
+
+The safe way to use this repository is as a cross-check rather than a replacement:
+
+1. Export from Qualtrics once, as **both** CSV and SPSS `.sav`
+   (`python scripts/fetch_qualtrics.py --format spss`).
+2. Use this pipeline to work out and document your screening rules, and to see your
+   participant flow, descriptives, reliabilities and assumption tests quickly.
+3. Do the analysis you will actually report in SPSS, mirroring those decisions, and
+   keep the syntax.
+4. Compare the two. If the numbers agree, you have caught your own data-handling
+   errors before a marker does. If they disagree, find out why — that discrepancy
+   is worth more to you than either result alone.
+
+Also note the naming convention: the output file is submitted as
+`Surname-GDPA-output`, alongside `Surname-GDPA-journal manuscript`.
+
+## Part 5 — What the scripts deliberately leave to you
+
+They stop short of your reported inferential analysis, because the model has to
+match the data analysis plan you agreed with your supervisor, and because your DAP
+feedback should drive it. `config/study.yaml` records which model you intend
+(`correlation`, `regression`, `mediation`, `moderation`) so the right assumption
+tests run, and `inferential_statistics.md` fits a basic OLS model so you can see
+the effect sizes and confidence intervals APA 7th requires — but treat that as
 scaffolding, not as your reported analysis.
 
 For mediation or moderation specifically, you will most likely want PROCESS (in

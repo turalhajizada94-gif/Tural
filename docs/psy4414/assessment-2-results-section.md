@@ -1,5 +1,13 @@
 # Assessment 2 — Results Section
 
+> **These notes come from the walkthrough video.** Where they differ from the
+> rubric, the GDPA submission guidelines or the Results Section FAQ, those
+> documents win — see
+> [results-section-requirements.md](results-section-requirements.md), which also
+> covers three things the video did not mention: the required subsection
+> structure, the aim/hypotheses/design page that precedes the Results, and the
+> rule that Cronbach's alpha and sample demographics belong in the Method.
+
 ## Why this section matters
 
 The results section is the engine of the manuscript. It is where everything comes
@@ -17,7 +25,7 @@ analysis in a quantitative one, the rigour of the work comes to the fore here.
 
 | Requirement | Detail |
 | --- | --- |
-| Word limit (quantitative) | Up to 1,200 words *(spoken figure was partly cut in the recording — verify against the assessment brief)* |
+| Word limit (quantitative) | Up to 1,200 words *(spoken figure was partly cut in the recording; the submission guidelines give 1,500–2,000 for the Results of the final manuscript — verify the A2 figure on Moodle)* |
 | Word limit (qualitative) | Up to 2,000 words |
 | Hurdle status | Competency hurdle — you must pass it |
 | Feedback | You will receive feedback on this submission |
@@ -75,11 +83,17 @@ study. Remember you are recounting what you did for someone else's understanding
 so make the most of the descriptives to let the marker see where your data comes
 from.
 
+Note the scope, per the FAQ: this subsection describes your **study variables**,
+not your sample. Demographics go in the Method unless they bear directly on
+hypothesis testing.
+
 ### Inferential statistics
 
 These can be presented as a paragraph, with diagrams, or in whatever form your
 analysis needs. Follow the conventions you learned and used in PSY4401 — those
-conventions are sound and are held in high regard in manuscript marking.
+conventions are sound and are held in high regard in manuscript marking. APA 7th
+also requires **effect sizes and confidence intervals**, and non-significant
+results are reported just as fully as significant ones.
 
 ## Qualitative results — what to include
 
