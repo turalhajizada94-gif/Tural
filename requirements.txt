@@ -1,0 +1,16 @@
+# Analysis pipeline for the PSY4414 results section.
+# Install with:  pip install -r requirements.txt
+#
+# Versions are lower bounds rather than exact pins so the pipeline installs
+# cleanly on whatever Python 3.10+ you have; it was verified against the
+# versions noted in the comments.
+
+pandas>=2.0          # verified with 3.0.5
+numpy>=1.24          # verified with 2.5.2
+scipy>=1.10          # verified with 1.18.1
+statsmodels>=0.14    # verified with 0.15.0
+matplotlib>=3.7      # verified with 3.11.1
+tabulate>=0.9        # markdown tables via pandas .to_markdown()
+PyYAML>=6.0          # reads config/study.yaml
+requests>=2.28       # Qualtrics API export only
+pyreadstat>=1.2       # reads SPSS .sav files for the codebook tool

@@ -1,0 +1,193 @@
+# ---------------------------------------------------------------------------
+# The Shield of Creativity: Openness Moderates the Impact of ESL Status on
+# Workplace Bullying
+#
+# Tural Hajizada (31843069) — PSY4414 A2, Journal Manuscript Milestone 3: Results
+#
+# Column names below are the REAL ones, read from the SPSS data dictionary
+# (DISPLAY DICTIONARY output, 176 variables, 1 September 2026 export).
+#
+# The survey was a shared battery of four randomised blocks:
+#   DASS-21 (21 items)          -> another project
+#   BFI-2 (60 items)            -> Open-Mindedness domain is this study's moderator
+#   Short Dark Triad (27 items) -> another project
+#   NAQ-R (22 items)            -> this study's outcome
+# ---------------------------------------------------------------------------
+
+qualtrics:
+  data_center: syd1
+  survey_id: SV_REPLACE_ME
+
+columns:
+  # Metadata names are matched loosely, so both the CSV form
+  # "Duration (in seconds)" and the SPSS form "Duration__in_seconds_" resolve.
+  response_id: ResponseId
+  progress: Progress
+  duration: Duration (in seconds)
+  finished: Finished
+  distribution_channel: DistributionChannel
+  start_date: StartDate
+
+  drop_on_import:
+    - IPAddress
+    - RecipientEmail
+    - RecipientFirstName
+    - RecipientLastName
+    - ExternalReference
+    - LocationLatitude
+    - LocationLongitude
+    - UserLanguage
+
+screening:
+  drop_preview_responses: true
+  require_finished: true
+  min_progress: 100
+
+  # Stated burden was 10-15 minutes. Check this floor against your own
+  # completion times before committing to it.
+  min_duration_seconds: 180
+  max_duration_seconds: null
+
+  consent:
+    # "Please select 'agree' to acknowledge that you have read ... and you
+    # consent to take part in the survey." 1 = Agree, 2 = Disagree.
+    column: QID127848236
+    required_value: 1
+
+  eligibility: []
+
+  categorical_eligibility:
+    # The three screening questions, each 1 = Yes, 2 = No. Each becomes one line
+    # of the participant flow.
+    - column: QID127848235
+      label: Not an Australian citizen or permanent resident
+      keep_values: [1]
+    - column: QID127848233
+      label: Not aged between 25 and 65
+      keep_values: [1]
+    - column: QID127848234
+      label: Not fluent in English
+      keep_values: [1]
+
+    # Employment status: 1 = full-time, 2 = part-time, 3 = self-employed.
+    # Your supervisor's annotation on the ethics application was "We will be
+    # focused on full-time only", which conflicts with the pre-registration's
+    # "full-time or part-time" — and neither anticipated the self-employed
+    # option that the survey actually offered. Confirm, then enable.
+    - column: Q2
+      label: Not employed full-time
+      keep_values: [1]
+      enabled: false
+
+  # NO ATTENTION CHECKS EXIST IN THIS DATASET. The ethics application promised
+  # two ("Please select 'Somewhat agree' ... to show you are reading
+  # carefully"), but the data dictionary contains none, so the pre-registered
+  # exclusion cannot be applied. Raise this with your supervisor; the duration
+  # floor above is the only remaining careless-responding screen.
+  attention_checks: []
+  max_attention_check_failures: 0
+
+  max_missing_proportion_per_scale: 0.20
+
+scales:
+  bullying:
+    label: Workplace Bullying (NAQ-R)
+    # Negative Acts Questionnaire-Revised, 22 items, positions 150-171.
+    # 1 = Never, 2 = Occasionally, 3 = Monthly, 4 = Weekly, 5 = Daily.
+    # SPSS renamed duplicated Qualtrics tags, hence the .0 / .1 suffixes.
+    items: [Q2.1, Q3.1, Q4.0, Q5.1, Q6.1, Q7.0, Q8.0, Q9.0, Q10.0, Q11.0,
+            Q12.0, Q13.0, Q14.0, Q15.0, Q16.0, Q17.0, Q18.0, Q19.0, Q20.0,
+            Q21.0, Q22, Q23]
+    reverse_items: []
+    response_range: [1, 5]
+    score: sum
+
+  openness:
+    label: Open-Mindedness (BFI-2)
+    # NOT the pre-registered measure. The survey administered the 60-item BFI-2
+    # (Soto & John, 2017), not the 4-item Mini-IPIP6 Openness subscale. These
+    # are the 12 Open-Mindedness items (BFI-2 items 5, 10, 15 ... 60), verified
+    # against the question text in the data dictionary.
+    # 1 = Disagree strongly ... 5 = Agree strongly (NOT the pre-registered
+    # 7-point scale).
+    items: [BFI_Q5_, BFI_Q10, BFI_Q15_, BFI_Q20__, BFI_Q25__, BFI_Q30__,
+            BFI_Q35_, BFI_Q40_, BFI_Q45_, BFI_Q50__, BFI_Q55_, BFI_Q60_]
+    # Standard BFI-2 negatively keyed Open-Mindedness items, each confirmed
+    # from its wording: few artistic interests / avoids intellectual
+    # discussions / little creativity / difficulty imagining / poetry boring /
+    # little interest in abstract ideas.
+    reverse_items: [BFI_Q5_, BFI_Q25__, BFI_Q30__, BFI_Q45_, BFI_Q50__, BFI_Q55_]
+    response_range: [1, 5]
+    score: mean
+
+derived:
+  ESL:
+    # The pre-registration described a Yes/No "Is English your first language?"
+    # question. The survey actually asked a 5-level proficiency question (Q5):
+    #   1 = English is my first language, native proficiency
+    #   2 = Not my first language, but native proficiency
+    #   3 = Not my first language, highly fluent
+    #   4 = Not my first language, moderately fluent
+    #   5 = Not my first language, not very fluent
+    # Levels 2-5 all mean "English is not my first language", so ESL = 1 there.
+    # Level 2 is the boundary case worth a sensitivity check.
+    from: Q5
+    label: ESL status
+    mapping:
+      1: 0
+      2: 1
+      3: 1
+      4: 1
+      5: 1
+    levels:
+      0: Native English speaker
+      1: ESL speaker
+
+  Age_years:
+    # Q1 is stored as 1-41 with value labels 25-65, so the raw code is NOT the
+    # age. Analysing Q1 directly would understate every age by 24 years.
+    from: Q1
+    label: Age in years
+    offset: 24
+
+value_labels:
+  Gender:
+    1: Woman
+    2: Man
+    3: Non-binary/Gender diverse
+    4: Prefer not to say
+  Employment:
+    1: Employed full-time
+    2: Employed part-time
+    3: Self-employed
+
+demographics:
+  continuous: [Age_years]
+  categorical: [Gender, ESL, Employment]
+
+rename:
+  # Friendlier names applied after screening, so the outputs read sensibly.
+  Q3: Gender
+  Q2: Employment
+  Q6: Industry
+
+analysis:
+  model: moderation
+  outcome: bullying
+  predictor: ESL
+  moderator: openness
+  covariates: [Gender]
+
+  centre_moderator: true
+  simple_slopes_sd: [-1, 0, 1]
+
+  dummy_reference:
+    Gender: 2   # Man
+
+thresholds:
+  vif_max: 4.0
+  standardised_skew_kurtosis: 1.96
+  mahalanobis_p: 0.001
+  cooks_distance_max: 1.0
+  mcar_alpha: 0.05
+  alpha_floor: 0.70
