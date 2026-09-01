@@ -1,24 +1,25 @@
-"""Produce the statistics behind each Results section subsection.
+"""Descriptives, reliabilities and assumption testing for the Results section.
 
-Outputs are grouped to match where the unit requires each statistic to be
-reported, which is not the same as where it feels natural to put it. Per the
-Results Section FAQ, Cronbach's alpha for validated scales and the sample
-demographics belong in the METHOD, while the Preliminary Analyses subsection
-describes the study VARIABLES.
+Outputs are grouped by where the unit requires each statistic to be reported,
+which is not the same as where it feels natural to put it. Per the Results
+Section FAQ, Cronbach's alpha for validated scales and the sample demographics
+belong in the METHOD; the Preliminary Analyses subsection describes the study
+VARIABLES.
 
-Reads data/processed/analysis_sample.csv and writes to output/:
+Assumption tests follow the pre-registered analysis plan: standardised skew and
+kurtosis against +/-1.96, Shapiro-Wilk, Mahalanobis and Cook's distance,
+Durbin-Watson, VIF < 4, and Little's MCAR to decide between listwise deletion
+and multiple imputation.
+
+Writes to output/:
 
     method_section_stats.md   demographics + reliabilities  -> Method, not Results
     assumption_testing.md     -> Results subsection 2
     preliminary_analyses.md   variable descriptives + correlations -> subsection 3
-    inferential_statistics.md effect sizes and CIs -> subsection 4 (scaffold only)
     correlations.csv          machine-readable matrix
-    fig_histograms.png        distribution of each composite
-    fig_residuals.png         residuals vs fitted, and a normal Q-Q plot
-    fig_scatter_matrix.png    linearity check across model variables
+    fig_histograms.png, fig_residuals.png, fig_scatter_matrix.png
 
-Every table is a working output. Reformat to APA 7th before it goes in the
-manuscript.
+Hypothesis testing lives in scripts/hypothesis_tests.py.
 
 Usage:
     python scripts/analyse.py
@@ -39,25 +40,28 @@ import pandas as pd
 import scipy.stats as stats
 import statsmodels.api as sm
 from statsmodels.stats.diagnostic import het_breuschpagan
-from statsmodels.stats.outliers_influence import variance_inflation_factor
+from statsmodels.stats.outliers_influence import OLSInfluence, variance_inflation_factor
 from statsmodels.stats.stattools import durbin_watson
 
 from common import (
     OUTPUT_DIR,
     PROCESSED_DIR,
+    build_model_frame,
     cronbach_alpha,
     ensure_dirs,
+    littles_mcar_test,
     load_config,
     reverse_score,
 )
-
-Z_OUTLIER = 3.29
-ALPHA_FLOOR = 0.70
 
 APA_NOTE = (
     "> Working output. Reformat as an APA 7th table before it goes in the "
     "manuscript, and reference it in the text."
 )
+
+
+def thresholds(config: dict) -> dict:
+    return config.get("thresholds", {})
 
 
 def stars(p: float) -> str:
@@ -70,28 +74,8 @@ def stars(p: float) -> str:
     return ""
 
 
-def describe_sample(df: pd.DataFrame, config: dict) -> list[str]:
-    lines = ["## Sample description", "", f"Final analysed sample: **N = {len(df)}**", ""]
-
-    for col in config["demographics"]["continuous"]:
-        if col in df.columns:
-            values = pd.to_numeric(df[col], errors="coerce").dropna()
-            if values.empty:
-                continue
-            lines.append(
-                f"- **{col}**: M = {values.mean():.2f}, SD = {values.std(ddof=1):.2f}, "
-                f"range {values.min():.0f}–{values.max():.0f} (n = {len(values)})"
-            )
-
-    for col in config["demographics"]["categorical"]:
-        if col in df.columns:
-            counts = df[col].value_counts(dropna=False)
-            pct = (counts / len(df) * 100).round(1)
-            parts = [f"{idx} {n} ({pct[idx]}%)" for idx, n in counts.items()]
-            lines.append(f"- **{col}**: " + "; ".join(parts))
-
-    lines.append("")
-    return lines
+def fmt_p(p: float) -> str:
+    return f"{p:.3f}" if p >= 0.001 else "<.001"
 
 
 def scored_items(df: pd.DataFrame, spec: dict) -> pd.DataFrame:
@@ -110,10 +94,11 @@ def scored_items(df: pd.DataFrame, spec: dict) -> pd.DataFrame:
 
 
 def reliability_table(df: pd.DataFrame, config: dict) -> pd.DataFrame:
+    floor = thresholds(config).get("alpha_floor", 0.70)
     rows = []
     for spec in config["scales"].values():
         block = scored_items(df, spec)
-        if block.empty or block.shape[1] < 2:
+        if block.shape[1] < 2:
             continue
         alpha = cronbach_alpha(block)
         rows.append(
@@ -121,10 +106,42 @@ def reliability_table(df: pd.DataFrame, config: dict) -> pd.DataFrame:
                 "Scale": spec["label"],
                 "Items": block.shape[1],
                 "α": round(alpha, 2),
-                "Below .70": "YES — contact supervisor" if alpha < ALPHA_FLOOR else "no",
+                f"Below {floor:.2f}": "YES — contact supervisor" if alpha < floor else "no",
             }
         )
     return pd.DataFrame(rows)
+
+
+def describe_sample(df: pd.DataFrame, config: dict) -> list[str]:
+    lines = [f"Final analysed sample: **N = {len(df)}**", ""]
+
+    for col in config["demographics"]["continuous"]:
+        if col in df.columns:
+            values = pd.to_numeric(df[col], errors="coerce").dropna()
+            if values.empty:
+                continue
+            lines.append(
+                f"- **{col}**: M = {values.mean():.2f}, SD = {values.std(ddof=1):.2f}, "
+                f"range {values.min():.0f}–{values.max():.0f} (n = {len(values)})"
+            )
+
+    levels = {
+        name: {int(k): v for k, v in (spec.get("levels") or {}).items()}
+        for name, spec in (config.get("derived") or {}).items()
+    }
+    for col in config["demographics"]["categorical"]:
+        if col not in df.columns:
+            continue
+        counts = df[col].value_counts(dropna=False)
+        pct = (counts / len(df) * 100).round(1)
+        parts = []
+        for idx, n in counts.items():
+            label = levels.get(col, {}).get(idx, idx)
+            parts.append(f"{label} {n} ({pct[idx]}%)")
+        lines.append(f"- **{col}**: " + "; ".join(parts))
+
+    lines.append("")
+    return lines
 
 
 def variable_descriptives(df: pd.DataFrame, config: dict) -> pd.DataFrame:
@@ -132,7 +149,7 @@ def variable_descriptives(df: pd.DataFrame, config: dict) -> pd.DataFrame:
     for name, spec in config["scales"].items():
         if name not in df.columns:
             continue
-        values = df[name].dropna()
+        values = pd.to_numeric(df[name], errors="coerce").dropna()
         rows.append(
             {
                 "Variable": spec["label"],
@@ -152,26 +169,25 @@ def correlation_matrix(df: pd.DataFrame, variables: list[str]) -> tuple[pd.DataF
     data = df[variables]
     n = len(variables)
     r_mat = pd.DataFrame(np.eye(n), index=variables, columns=variables)
-    display = pd.DataFrame("—", index=variables, columns=variables)
+    display = pd.DataFrame("", index=variables, columns=variables)
 
     for i in range(n):
+        display.iloc[i, i] = "—"
         for j in range(i + 1, n):
             pair = data[[variables[i], variables[j]]].dropna()
             if len(pair) < 3:
                 continue
             r, p = stats.pearsonr(pair.iloc[:, 0], pair.iloc[:, 1])
             r_mat.iloc[i, j] = r_mat.iloc[j, i] = r
-            cell = f"{r:.2f}{stars(p)}"
-            display.iloc[j, i] = cell
-            display.iloc[i, j] = ""
+            display.iloc[j, i] = f"{r:.2f}{stars(p)}"
     return r_mat, display
 
 
 def correlation_details(df: pd.DataFrame, variables: list[str]) -> pd.DataFrame:
     """Pairwise correlations with 95% CIs, via the Fisher z transformation.
 
-    APA 7th expects effect sizes with confidence intervals; r is itself the effect
-    size, so the CI is what needs adding.
+    APA 7th expects effect sizes with confidence intervals; r is itself the
+    effect size, so the CI is what needs adding.
     """
     rows = []
     for i, first in enumerate(variables):
@@ -181,195 +197,192 @@ def correlation_details(df: pd.DataFrame, variables: list[str]) -> pd.DataFrame:
             if n < 4:
                 continue
             r, p = stats.pearsonr(pair[first], pair[second])
-            z = np.arctanh(r)
             se = 1 / np.sqrt(n - 3)
-            lo, hi = np.tanh(z - 1.96 * se), np.tanh(z + 1.96 * se)
+            lo, hi = np.tanh(np.arctanh(r) - 1.96 * se), np.tanh(np.arctanh(r) + 1.96 * se)
             rows.append(
                 {
                     "Pair": f"{first} – {second}",
                     "n": n,
                     "r": round(r, 2),
                     "95% CI": f"[{lo:.2f}, {hi:.2f}]",
-                    "p": f"{p:.3f}" if p >= 0.001 else "<.001",
+                    "p": fmt_p(p),
                 }
             )
     return pd.DataFrame(rows)
 
 
-def inferential_scaffold(df: pd.DataFrame, config: dict) -> tuple[list[str], object]:
-    """OLS with the effect sizes and confidence intervals APA 7th requires.
+def assumption_report(data: pd.DataFrame, info: dict, config: dict) -> tuple[list[str], object]:
+    limits = thresholds(config)
+    zcrit = limits.get("standardised_skew_kurtosis", 1.96)
+    vif_max = limits.get("vif_max", 4.0)
+    cooks_max = limits.get("cooks_distance_max", 1.0)
+    mahal_p = limits.get("mahalanobis_p", 0.001)
 
-    This is a scaffold, not your reported analysis: the model has to follow the
-    data analysis plan agreed with your supervisor. Mediation and moderation in
-    particular need bootstrapped indirect effects (e.g. PROCESS).
-    """
-    analysis = config["analysis"]
-    outcome = analysis["outcome"]
-    predictors = [v for v in model_variables(config) if v != outcome and v in df.columns]
+    outcome = info["outcome"]
+    design = info["design"] + ([info["interaction"]] if info["interaction"] else [])
+    candidates = [c for c in info["continuous"] if c in data.columns]
 
-    complete = df[predictors + [outcome]].dropna()
-    y = complete[outcome]
-    X = sm.add_constant(complete[predictors])
-    fit = sm.OLS(y, X).fit()
-
-    r2, adj_r2 = fit.rsquared, fit.rsquared_adj
-    f2 = r2 / (1 - r2) if r2 < 1 else np.nan
-
-    z = complete.apply(lambda c: (c - c.mean()) / c.std(ddof=1))
-    std_fit = sm.OLS(z[outcome], sm.add_constant(z[predictors])).fit()
-
-    ci = fit.conf_int()
-    rows = []
-    for name in predictors:
-        rows.append(
-            {
-                "Predictor": name,
-                "b": round(fit.params[name], 3),
-                "SE": round(fit.bse[name], 3),
-                "95% CI for b": f"[{ci.loc[name, 0]:.3f}, {ci.loc[name, 1]:.3f}]",
-                "β": round(std_fit.params[name], 3),
-                "t": round(fit.tvalues[name], 2),
-                "p": f"{fit.pvalues[name]:.3f}" if fit.pvalues[name] >= 0.001 else "<.001",
-            }
-        )
+    # Normality, standardised skew/kurtosis and Mahalanobis distance are only
+    # meaningful for continuous variables. ESL status is dichotomous by design.
+    continuous = [c for c in candidates if data[c].dropna().nunique() > 2]
+    dichotomous = [c for c in candidates if c not in continuous]
 
     lines = [
-        "# Inferential statistics (scaffold)",
+        "# Assumption Testing",
         "",
-        f"**Model in `config/study.yaml`:** {analysis['model']} — {outcome} regressed on "
-        f"{', '.join(predictors)} (n = {len(complete)}).",
+        f"Model: **{config['analysis']['model']}** — {outcome} regressed on "
+        f"{', '.join(design)}.",
         "",
-        "> This runs an ordinary least squares model so the effect sizes and "
-        "confidence intervals are in front of you. It is **not** your reported "
-        "analysis. Use the model agreed in your data analysis plan, and for "
-        "mediation or moderation use PROCESS or an equivalent with bootstrapped "
-        "indirect effects.",
-        "",
-        "## Overall model",
-        "",
-        f"- F({int(fit.df_model)}, {int(fit.df_resid)}) = {fit.fvalue:.2f}, "
-        f"p = {fit.f_pvalue:.4f}" if fit.f_pvalue >= 0.0001 else
-        f"- F({int(fit.df_model)}, {int(fit.df_resid)}) = {fit.fvalue:.2f}, p < .001",
-        f"- R² = {r2:.3f}, adjusted R² = {adj_r2:.3f}",
-        f"- Cohen's f² = {f2:.3f} "
-        f"({'small' if f2 < 0.15 else 'medium' if f2 < 0.35 else 'large'} by conventional benchmarks)",
-        "",
-        "## Coefficients",
-        "",
-        pd.DataFrame(rows).to_markdown(index=False),
-        "",
-        APA_NOTE,
-        "",
-        "Report non-significant predictors as fully as significant ones, and keep "
-        "interpretation of what the findings *mean* for the Discussion.",
-        "",
-    ]
-    return lines, fit
-
-
-def model_variables(config: dict) -> list[str]:
-    analysis = config["analysis"]
-    variables = list(analysis["predictors"])
-    if analysis.get("mediator"):
-        variables.append(analysis["mediator"])
-    if analysis.get("moderator"):
-        variables.append(analysis["moderator"])
-    variables += [c for c in (analysis.get("covariates") or [])]
-    variables.append(analysis["outcome"])
-    return list(dict.fromkeys(variables))
-
-
-def mahalanobis_outliers(data: pd.DataFrame) -> tuple[int, float, pd.Series]:
-    clean = data.dropna()
-    cov = np.cov(clean.values, rowvar=False)
-    inv_cov = np.linalg.pinv(cov)
-    centred = clean.values - clean.values.mean(axis=0)
-    d2 = np.einsum("ij,jk,ik->i", centred, inv_cov, centred)
-    critical = stats.chi2.ppf(0.999, df=clean.shape[1])
-    return int((d2 > critical).sum()), float(critical), pd.Series(d2, index=clean.index)
-
-
-def assumption_report(df: pd.DataFrame, config: dict) -> tuple[list[str], object]:
-    analysis = config["analysis"]
-    outcome = analysis["outcome"]
-    predictors = [v for v in model_variables(config) if v != outcome]
-    variables = predictors + [outcome]
-    present = [v for v in variables if v in df.columns]
-
-    lines = [
-        "# Assumption testing",
-        "",
-        f"Model specified in `config/study.yaml`: **{analysis['model']}** "
-        f"predicting **{outcome}** from {', '.join(predictors)}.",
+        "Thresholds follow the pre-registered analysis plan.",
         "",
         "## 1. Missing data",
         "",
     ]
 
+    present = [c for c in [outcome] + design if c in data.columns]
     miss = pd.DataFrame(
         {
             "Variable": present,
-            "n missing": [int(df[v].isna().sum()) for v in present],
-            "% missing": [round(df[v].isna().mean() * 100, 1) for v in present],
+            "n missing": [int(data[c].isna().sum()) for c in present],
+            "% missing": [round(data[c].isna().mean() * 100, 2) for c in present],
         }
     )
     lines += [miss.to_markdown(index=False), ""]
-    complete = df[present].dropna()
-    lines += [f"Complete cases across all model variables: **n = {len(complete)}**", ""]
 
-    lines += ["## 2. Univariate normality", "", "Shapiro–Wilk, plus skew and kurtosis.", ""]
+    complete = data[present].dropna()
+    overall_missing = 100 * (1 - len(complete) / len(data)) if len(data) else 0
+    lines += [
+        f"Complete cases across all model variables: **n = {len(complete)}** "
+        f"({overall_missing:.1f}% of cases have at least one missing value).",
+        "",
+        "### Little's MCAR test",
+        "",
+    ]
+
+    mcar = littles_mcar_test(data[continuous])
+    if mcar["no_missing"]:
+        lines += ["No missing values among the continuous model variables.", ""]
+    else:
+        lines += [
+            f"χ²({mcar['df']}) = {mcar['statistic']:.2f}, p = {fmt_p(mcar['p'])}, "
+            f"across {mcar['n_patterns']} missingness patterns.",
+            "",
+            "The pre-registered rule was listwise deletion if missingness is under "
+            "5% and MCAR holds, multiple imputation otherwise. On these numbers: "
+            + (
+                "**listwise deletion is defensible** (MCAR not rejected)."
+                if (mcar["p"] or 0) > limits.get("mcar_alpha", 0.05)
+                else "**MCAR was rejected** — discuss multiple imputation with your supervisor."
+            ),
+            "",
+        ]
+
+    lines += [
+        "## 2. Univariate normality",
+        "",
+        f"Standardised skew and kurtosis (statistic / SE) against ±{zcrit}, "
+        "plus Shapiro–Wilk.",
+        "",
+    ]
+    if dichotomous:
+        lines += [
+            "Excluded as dichotomous, where normality does not apply: "
+            + ", ".join(f"`{c}`" for c in dichotomous)
+            + ".",
+            "",
+        ]
     rows = []
-    for var in present:
-        values = df[var].dropna()
-        w, p = stats.shapiro(values) if 3 <= len(values) <= 5000 else (np.nan, np.nan)
+    for var in continuous:
+        values = data[var].dropna()
+        n = len(values)
+        skew = stats.skew(values, bias=False)
+        kurt = stats.kurtosis(values, bias=False)
+        se_skew = np.sqrt(6 * n * (n - 1) / ((n - 2) * (n + 1) * (n + 3)))
+        se_kurt = 2 * se_skew * np.sqrt((n * n - 1) / ((n - 3) * (n + 5)))
+        z_skew, z_kurt = skew / se_skew, kurt / se_kurt
+        w, p = stats.shapiro(values) if 3 <= n <= 5000 else (np.nan, np.nan)
         rows.append(
             {
                 "Variable": var,
-                "W": round(w, 3),
-                "p": f"{p:.3f}" if p >= 0.001 else "<.001",
-                "Skew": round(stats.skew(values, bias=False), 2),
-                "Kurtosis": round(stats.kurtosis(values, bias=False), 2),
-                "Within ±2": "yes"
-                if abs(stats.skew(values, bias=False)) < 2
-                and abs(stats.kurtosis(values, bias=False)) < 2
-                else "no",
+                "Skew": round(skew, 2),
+                "z-skew": round(z_skew, 2),
+                "Kurtosis": round(kurt, 2),
+                "z-kurtosis": round(z_kurt, 2),
+                f"Within ±{zcrit}": "yes" if abs(z_skew) < zcrit and abs(z_kurt) < zcrit else "NO",
+                "Shapiro–Wilk W": round(w, 3),
+                "p": fmt_p(p),
             }
         )
     lines += [pd.DataFrame(rows).to_markdown(index=False), ""]
 
-    lines += ["## 3. Univariate outliers", "", f"Standardised scores beyond ±{Z_OUTLIER}.", ""]
+    lines += [
+        "## 3. Univariate outliers",
+        "",
+        "The pre-registered plan inspects box plots; the counts below use ±3.29 "
+        "standardised scores as a numeric companion. See `fig_histograms.png`.",
+        "",
+    ]
     rows = []
-    for var in present:
-        values = df[var].dropna()
+    for var in continuous:
+        values = data[var].dropna()
         z = (values - values.mean()) / values.std(ddof=1)
-        rows.append({"Variable": var, "n outliers": int((z.abs() > Z_OUTLIER).sum())})
+        rows.append(
+            {
+                "Variable": var,
+                "n |z| > 3.29": int((z.abs() > 3.29).sum()),
+                "Min z": round(z.min(), 2),
+                "Max z": round(z.max(), 2),
+            }
+        )
     lines += [pd.DataFrame(rows).to_markdown(index=False), ""]
 
-    n_mahal, critical, _ = mahalanobis_outliers(df[present])
+    y = complete[outcome]
+    X = sm.add_constant(complete[design].astype(float))
+    fitted = sm.OLS(y, X).fit()
+    influence = OLSInfluence(fitted)
+
+    block = complete[continuous]
+    centred = block.to_numpy(dtype=float) - block.to_numpy(dtype=float).mean(axis=0)
+    inv_cov = np.linalg.pinv(np.cov(block.to_numpy(dtype=float), rowvar=False))
+    mahal = np.einsum("ij,jk,ik->i", centred, inv_cov, centred)
+    critical = stats.chi2.ppf(1 - mahal_p, df=block.shape[1])
+    cooks = influence.cooks_distance[0]
+
     lines += [
         "## 4. Multivariate outliers",
         "",
-        f"Mahalanobis distance against χ²(df = {len(present)}) critical value "
-        f"{critical:.2f} at p < .001: **{n_mahal} case(s) flagged**.",
+        f"- **Mahalanobis distance** against χ²({block.shape[1]}) = {critical:.2f} "
+        f"at p < {mahal_p}: **{int((mahal > critical).sum())} case(s) flagged** "
+        f"(maximum D² = {mahal.max():.2f}).",
+        f"- **Cook's distance**: maximum = {cooks.max():.3f}; "
+        f"**{int((cooks > cooks_max).sum())} case(s)** exceed {cooks_max}.",
         "",
     ]
 
-    y = complete[outcome]
-    X = sm.add_constant(complete[predictors])
-    fitted = sm.OLS(y, X).fit()
-
-    lines += ["## 5. Multicollinearity", "", "Variance inflation factors and tolerance.", ""]
-    if len(predictors) > 1:
+    lines += ["## 5. Multicollinearity", "", f"Pre-registered threshold: VIF < {vif_max}.", ""]
+    if len(design) > 1:
         rows = []
         for i, var in enumerate(X.columns):
             if var == "const":
                 continue
-            vif = variance_inflation_factor(X.values, i)
-            rows.append({"Predictor": var, "VIF": round(vif, 2), "Tolerance": round(1 / vif, 2)})
+            vif = variance_inflation_factor(X.to_numpy(dtype=float), i)
+            rows.append(
+                {
+                    "Predictor": var,
+                    "VIF": round(vif, 2),
+                    "Tolerance": round(1 / vif, 2),
+                    f"Under {vif_max}": "yes" if vif < vif_max else "NO",
+                }
+            )
         lines += [pd.DataFrame(rows).to_markdown(index=False), ""]
-        lines += ["Conventional thresholds: VIF < 10 and tolerance > .10.", ""]
+        if info["interaction"]:
+            lines += [
+                "The moderator was mean-centred before the interaction term was "
+                "formed, which is what keeps the interaction's VIF interpretable.",
+                "",
+            ]
     else:
-        lines += ["Only one predictor in the model, so multicollinearity does not apply.", ""]
+        lines += ["Only one predictor, so multicollinearity does not apply.", ""]
 
     bp_lm, bp_p, _, _ = het_breuschpagan(fitted.resid, fitted.model.exog)
     dw = durbin_watson(fitted.resid)
@@ -378,12 +391,15 @@ def assumption_report(df: pd.DataFrame, config: dict) -> tuple[list[str], object
     lines += [
         "## 6. Residual diagnostics",
         "",
-        f"- **Homoscedasticity** (Breusch–Pagan): LM = {bp_lm:.2f}, "
-        f"p = {bp_p:.3f} — {'no evidence of heteroscedasticity' if bp_p > .05 else 'assumption violated'}",
-        f"- **Independence of residuals** (Durbin–Watson): {dw:.2f} "
-        f"— {'acceptable' if 1.5 < dw < 2.5 else 'outside the 1.5–2.5 range'}",
-        f"- **Normality of residuals** (Shapiro–Wilk): W = {w_res:.3f}, "
-        f"p = {p_res:.3f} — {'acceptable' if p_res > .05 else 'departs from normality'}",
+        f"- **Homoscedasticity** (Breusch–Pagan): LM = {bp_lm:.2f}, p = {fmt_p(bp_p)} — "
+        + ("no evidence of heteroscedasticity" if bp_p > 0.05 else "**assumption violated**")
+        + ". The pre-registered check was a scatterplot of residuals; see `fig_residuals.png`.",
+        f"- **Autocorrelation** (Durbin–Watson): {dw:.2f} — "
+        + ("acceptable" if 1.5 < dw < 2.5 else "**outside the 1.5–2.5 range**"),
+        f"- **Normality of residuals** (Shapiro–Wilk): W = {w_res:.3f}, p = {fmt_p(p_res)} — "
+        + ("acceptable" if p_res > 0.05 else "**departs from normality**")
+        + ". The pre-registered check was a normal P–P plot; the Q–Q plot in "
+        "`fig_residuals.png` serves the same purpose.",
         "- **Linearity**: inspect `fig_residuals.png` and `fig_scatter_matrix.png`; "
         "residuals should show no systematic pattern around zero.",
         "",
@@ -402,19 +418,24 @@ def assumption_report(df: pd.DataFrame, config: dict) -> tuple[list[str], object
     return lines, fitted
 
 
-def make_figures(df: pd.DataFrame, config: dict, fitted) -> None:
-    variables = [v for v in model_variables(config) if v in df.columns]
+def make_figures(data: pd.DataFrame, info: dict, fitted) -> None:
+    variables = [c for c in info["continuous"] if c in data.columns]
 
     ncols = min(3, len(variables))
     nrows = int(np.ceil(len(variables) / ncols))
-    fig, axes = plt.subplots(nrows, ncols, figsize=(4 * ncols, 3 * nrows), squeeze=False)
-    for ax, var in zip(axes.flat, variables):
-        values = df[var].dropna()
+    fig, axes = plt.subplots(nrows, ncols * 2, figsize=(4 * ncols * 2, 3 * nrows), squeeze=False)
+    flat = axes.flat
+    for var in variables:
+        values = data[var].dropna()
+        ax = next(flat)
         ax.hist(values, bins=15, color="#4C72B0", edgecolor="white")
         ax.set_title(f"{var}\nM = {values.mean():.2f}, SD = {values.std(ddof=1):.2f}", fontsize=9)
-    for ax in axes.flat[len(variables) :]:
+        ax = next(flat)
+        ax.boxplot(values, widths=0.5)
+        ax.set_title(f"{var} — box plot", fontsize=9)
+    for ax in flat:
         ax.axis("off")
-    fig.suptitle("Distribution of composite scores", fontsize=11)
+    fig.suptitle("Distributions and box plots of model variables", fontsize=11)
     fig.tight_layout()
     fig.savefig(OUTPUT_DIR / "fig_histograms.png", dpi=150)
     plt.close(fig)
@@ -431,9 +452,9 @@ def make_figures(df: pd.DataFrame, config: dict, fitted) -> None:
     fig.savefig(OUTPUT_DIR / "fig_residuals.png", dpi=150)
     plt.close(fig)
 
-    subset = df[variables].dropna()
+    subset = data[variables].dropna()
     n = len(variables)
-    fig, axes = plt.subplots(n, n, figsize=(2.2 * n, 2.2 * n), squeeze=False)
+    fig, axes = plt.subplots(n, n, figsize=(2.4 * n, 2.4 * n), squeeze=False)
     for i in range(n):
         for j in range(n):
             ax = axes[i][j]
@@ -464,6 +485,7 @@ def main() -> None:
     config = load_config()
     ensure_dirs()
     df = pd.read_csv(args.input)
+    floor = thresholds(config).get("alpha_floor", 0.70)
 
     # --- Method section material (NOT the Results) ---------------------------
     alphas = reliability_table(df, config)
@@ -473,33 +495,38 @@ def main() -> None:
         "> Per the Results Section FAQ, both of these are reported in the Method, "
         "not the Results. Cronbach's alpha moves into the Results only if your "
         "study develops or refines a scale; demographics move only if they bear "
-        "directly on hypothesis testing.",
+        "directly on hypothesis testing. This study uses two validated scales, so "
+        "both stay in the Method.",
         "",
         "## Reliability of scales — Method, Measures subsection",
         "",
         alphas.to_markdown(index=False),
         "",
     ]
-    low = alphas[alphas["α"] < ALPHA_FLOOR] if not alphas.empty else alphas
+    low = alphas[alphas["α"] < floor] if not alphas.empty else alphas
     if not low.empty:
         method_lines += [
             f"**Contact your supervisor before running your analysis.** "
-            f"{len(low)} scale(s) fell below the conventionally accepted .70: "
-            + ", ".join(low["Scale"]),
+            f"{len(low)} scale(s) fell below the conventionally accepted {floor:.2f}: "
+            + ", ".join(low["Scale"])
+            + ". The FAQ is explicit that this conversation happens first.",
             "",
         ]
     method_lines += ["## Sample description — Method, Participants subsection", ""]
-    method_lines += describe_sample(df, config)[2:]
+    method_lines += describe_sample(df, config)
     (OUTPUT_DIR / "method_section_stats.md").write_text("\n".join(method_lines) + "\n")
 
+    # --- Build the pre-registered design -------------------------------------
+    data, info = build_model_frame(df, config)
+
     # --- Results subsection 2: Assumption Testing ----------------------------
-    assumption_lines, fitted = assumption_report(df, config)
+    assumption_lines, fitted = assumption_report(data, info, config)
     (OUTPUT_DIR / "assumption_testing.md").write_text("\n".join(assumption_lines) + "\n")
 
     # --- Results subsection 3: Preliminary Analyses --------------------------
     descriptives = variable_descriptives(df, config)
-    variables = [v for v in model_variables(config) if v in df.columns]
-    r_mat, display = correlation_matrix(df, variables)
+    variables = [c for c in info["continuous"] if c in data.columns]
+    r_mat, display = correlation_matrix(data, variables)
     r_mat.round(3).to_csv(OUTPUT_DIR / "correlations.csv")
 
     prelim_lines = [
@@ -516,27 +543,23 @@ def main() -> None:
         "",
         display.to_markdown(),
         "",
-        "`* p < .05, ** p < .01, *** p < .001` (two-tailed Pearson, pairwise deletion)",
+        "`* p < .05, ** p < .01, *** p < .001` (two-tailed, pairwise deletion)",
         "",
         "### With confidence intervals",
         "",
-        correlation_details(df, variables).to_markdown(index=False),
+        correlation_details(data, variables).to_markdown(index=False),
         "",
-        "> Correlations belong here only if they are preliminary to a hypothesised "
-        "model. If the relationships between variables *are* your hypothesis test, "
-        "move them to Inferential Statistics. Check the correlation type suits the "
-        "measurement level of your variables.",
+        "> ESL status is binary, so its correlations are point-biserial. "
+        "Correlations belong here because they are preliminary to the "
+        "hypothesised moderation model; if a relationship *is* your hypothesis "
+        "test, it moves to Inferential Statistics.",
         "",
         APA_NOTE,
         "",
     ]
     (OUTPUT_DIR / "preliminary_analyses.md").write_text("\n".join(prelim_lines) + "\n")
 
-    # --- Results subsection 4: Inferential Statistics ------------------------
-    inferential_lines, _ = inferential_scaffold(df, config)
-    (OUTPUT_DIR / "inferential_statistics.md").write_text("\n".join(inferential_lines) + "\n")
-
-    make_figures(df, config, fitted)
+    make_figures(data, info, fitted)
 
     print("Reliabilities (-> Method):")
     print(alphas.to_string(index=False))
@@ -544,7 +567,8 @@ def main() -> None:
     print(descriptives.to_string(index=False))
     print("\nIntercorrelations:")
     print(display.to_string())
-    print(f"\nWrote 4 reports, correlations.csv and 3 figures to {OUTPUT_DIR}/")
+    print(f"\nWrote reports and figures to {OUTPUT_DIR}/")
+    print("Next: python scripts/hypothesis_tests.py")
 
 
 if __name__ == "__main__":
