@@ -7,9 +7,13 @@
 # Configured from the PSY4412 pre-registration, ethics application and
 # Introduction milestone. Every script reads this file.
 #
-# >>> VERIFY THE COLUMN NAMES against your actual Qualtrics export before the
-# >>> first real run. prepare_data.py reports any item listed here that is
-# >>> missing from the export, so a mismatch is loud rather than silent.
+# >>> THE COLUMN NAMES BELOW ARE PLACEHOLDERS AND WILL NOT MATCH YOUR EXPORT.
+# >>> Your survey was a shared battery of roughly 176 variables with generic
+# >>> Qualtrics tags (Q1, Q4_11, BFI_Q17__, Q13.0). Run
+# >>>     python scripts/inspect_export.py
+# >>> to produce output/codebook.md, which pairs every column with its question
+# >>> text, then fill in the real names here. prepare_data.py reports any item
+# >>> listed here that is missing from the export, so a mismatch is loud.
 # ---------------------------------------------------------------------------
 
 qualtrics:
@@ -76,6 +80,14 @@ screening:
       keep_values: [1]
       enabled: false
 
+    # Your export contains Q_DataPolicyViolations, which is Qualtrics' own fraud
+    # and bot detection. A non-empty value flags a suspect response and is worth
+    # reporting in Data Cleaning. Set the column name and the codes you keep.
+    - column: Q_DataPolicyViolations
+      label: Flagged by Qualtrics fraud detection
+      keep_values: [0]
+      enabled: false
+
   max_missing_proportion_per_scale: 0.20
 
 scales:
@@ -93,10 +105,13 @@ scales:
 
   openness:
     label: Openness to Experience (Mini-IPIP6)
-    # Mini-IPIP6 Openness subscale, 4 items, 7-point Likert (Sibley, 2012).
+    # UNRESOLVED. The pre-registration specifies the 4-item Mini-IPIP6 Openness
+    # subscale on a 7-point scale (Sibley, 2012). Your export instead contains a
+    # 60-item BFI block (BFI_Q1_ ... BFI_Q60_), which is the length of the BFI-2.
+    # If the BFI-2 was administered in place of the Mini-IPIP6, this becomes its
+    # 12-item Open-Mindedness domain on a 5-point scale, and both the item list
+    # and response_range below change. Resolve this before running anything.
     items: [OPEN1, OPEN2, OPEN3, OPEN4]
-    # VERIFY: in the standard Mini-IPIP6 Openness subscale three of the four
-    # items are negatively keyed. Confirm against the version in your survey.
     reverse_items: [OPEN2, OPEN3, OPEN4]
     response_range: [1, 7]
     score: mean

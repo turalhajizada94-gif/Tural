@@ -16,20 +16,23 @@ configured from the PSY4412 pre-registration and ethics application.
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 
-# 1. tell the pipeline about your survey
-$EDITOR config/study.yaml
-
-# 2. get the data (or drop a manual Qualtrics export into data/raw/)
+# 1. get the data (or drop a manual Qualtrics export into data/raw/)
 export QUALTRICS_API_TOKEN='...'
 python scripts/fetch_qualtrics.py
 
-# 3. screen, score, and build the participant flow
+# 2. work out which of the ~176 shared-battery columns are yours
+python scripts/inspect_export.py        # writes output/codebook.md
+
+# 3. put those column names into the config
+$EDITOR config/study.yaml
+
+# 4. screen, score, and build the participant flow
 python scripts/prepare_data.py
 
-# 4. descriptives, reliabilities, correlations, assumption tests
+# 5. descriptives, reliabilities, correlations, assumption tests
 python scripts/analyse.py
 
-# 5. H1 (t-test) and H2 (moderation with simple slopes)
+# 6. H1 (t-test) and H2 (moderation with simple slopes)
 python scripts/hypothesis_tests.py
 ```
 
@@ -42,6 +45,7 @@ export so you can watch the whole workflow run.
 | --- | --- |
 | `config/study.yaml` | The one file you edit: column names, scales, reverse items, screening rules, model |
 | `scripts/fetch_qualtrics.py` | Downloads responses via the Qualtrics API |
+| `scripts/inspect_export.py` | Builds a codebook pairing each column with its question text |
 | `scripts/prepare_data.py` | Screening, participant flow, reverse scoring, composites |
 | `scripts/analyse.py` | Descriptives, Cronbach's alpha, intercorrelations, assumption tests, figures |
 | `scripts/hypothesis_tests.py` | H1 independent samples t-test; H2 hierarchical moderation with simple slopes |
