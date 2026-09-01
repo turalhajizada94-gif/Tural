@@ -49,6 +49,7 @@ from common import (
     build_model_frame,
     cronbach_alpha,
     ensure_dirs,
+    level_labels,
     littles_mcar_test,
     load_config,
     reverse_score,
@@ -125,10 +126,7 @@ def describe_sample(df: pd.DataFrame, config: dict) -> list[str]:
                 f"range {values.min():.0f}–{values.max():.0f} (n = {len(values)})"
             )
 
-    levels = {
-        name: {int(k): v for k, v in (spec.get("levels") or {}).items()}
-        for name, spec in (config.get("derived") or {}).items()
-    }
+    levels = level_labels(config)
     for col in config["demographics"]["categorical"]:
         if col not in df.columns:
             continue

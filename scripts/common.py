@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -41,30 +42,100 @@ def read_qualtrics_csv(path: Path | str) -> pd.DataFrame:
     return df
 
 
+def read_export(path: Path | str) -> pd.DataFrame:
+    """Read a Qualtrics CSV or an SPSS .sav into a plain DataFrame."""
+    path = Path(path)
+    if path.suffix.lower() == ".sav":
+        import pyreadstat
+
+        data, _ = pyreadstat.read_sav(str(path), apply_value_formats=False)
+        return data
+    return read_qualtrics_csv(path)
+
+
 def drop_identifying_columns(df: pd.DataFrame, config: dict) -> tuple[pd.DataFrame, list[str]]:
-    to_drop = [c for c in config["columns"].get("drop_on_import", []) if c in df.columns]
+    to_drop = [
+        resolved
+        for c in config["columns"].get("drop_on_import", [])
+        if (resolved := resolve_column(df, c)) is not None
+    ]
     return df.drop(columns=to_drop), to_drop
 
 
+def normalise(name: str) -> str:
+    return re.sub(r"[^a-z0-9]", "", str(name).lower())
+
+
+def resolve_column(df: pd.DataFrame, wanted: str | None) -> str | None:
+    """Find a column tolerating CSV/SPSS naming differences.
+
+    A Qualtrics CSV calls it `Duration (in seconds)`; the same variable in a
+    `.sav` is `Duration__in_seconds_`. Exact match first, then a match ignoring
+    case and punctuation.
+    """
+    if not wanted:
+        return None
+    if wanted in df.columns:
+        return wanted
+    target = normalise(wanted)
+    for column in df.columns:
+        if normalise(column) == target:
+            return column
+    return None
+
+
 def apply_derived(df: pd.DataFrame, config: dict) -> tuple[pd.DataFrame, dict]:
-    """Build recoded variables, e.g. ESL from 'Is English your first language?'."""
+    """Build recoded variables: ESL from the proficiency item, age from its code."""
     df = df.copy()
     report: dict[str, dict] = {}
     for name, spec in (config.get("derived") or {}).items():
-        source = spec["from"]
-        if source not in df.columns:
-            report[name] = {"label": spec.get("label", name), "error": f"{source} not in export"}
+        source = resolve_column(df, spec["from"])
+        if source is None:
+            report[name] = {
+                "label": spec.get("label", name),
+                "error": f"source column {spec['from']!r} not in export",
+            }
             continue
-        mapping = {int(k): v for k, v in spec["mapping"].items()}
+
         values = pd.to_numeric(df[source], errors="coerce")
-        df[name] = values.map(mapping)
-        report[name] = {
-            "label": spec.get("label", name),
-            "source": source,
-            "counts": df[name].value_counts(dropna=False).to_dict(),
-            "unmapped": int(values.notna().sum() - df[name].notna().sum()),
-        }
+        if "mapping" in spec:
+            mapping = {int(k): v for k, v in spec["mapping"].items()}
+            df[name] = values.map(mapping)
+            detail = {
+                "counts": df[name].value_counts(dropna=False).to_dict(),
+                "unmapped": int(values.notna().sum() - df[name].notna().sum()),
+            }
+        else:
+            df[name] = values * spec.get("scale", 1) + spec.get("offset", 0)
+            detail = {
+                "transform": f"({source} x {spec.get('scale', 1)}) + {spec.get('offset', 0)}",
+                "range": f"{df[name].min():g} to {df[name].max():g}"
+                if df[name].notna().any()
+                else "all missing",
+            }
+        report[name] = {"label": spec.get("label", name), "source": source, **detail}
     return df, report
+
+
+def apply_renames(df: pd.DataFrame, config: dict) -> tuple[pd.DataFrame, dict]:
+    mapping = {}
+    for old, new in (config.get("rename") or {}).items():
+        resolved = resolve_column(df, old)
+        if resolved is not None and new not in df.columns:
+            mapping[resolved] = new
+    return df.rename(columns=mapping), mapping
+
+
+def level_labels(config: dict) -> dict[str, dict]:
+    """Merge value labels declared directly with those on derived variables."""
+    labels = {
+        name: {int(k): v for k, v in mapping.items()}
+        for name, mapping in (config.get("value_labels") or {}).items()
+    }
+    for name, spec in (config.get("derived") or {}).items():
+        if spec.get("levels"):
+            labels[name] = {int(k): v for k, v in spec["levels"].items()}
+    return labels
 
 
 def coerce_numeric(df: pd.DataFrame, columns: list[str]) -> pd.DataFrame:
@@ -212,15 +283,30 @@ def build_model_frame(df: pd.DataFrame, config: dict) -> tuple[pd.DataFrame, dic
             data[moderator_col] = values
         design.append(moderator_col)
 
+    labels = level_labels(config)
+    requested_reference = spec.get("dummy_reference") or {}
     dummy_reference: dict[str, str] = {}
     for cov in spec.get("covariates") or []:
         if cov not in df.columns:
             continue
         if cov in categorical or df[cov].dtype == object:
-            dummies = pd.get_dummies(df[cov].astype(str), prefix=cov)
-            wanted = f"{cov}_{spec.get('gender_reference')}" if cov == "Gender" else None
-            reference = wanted if wanted in dummies.columns else dummies.columns[0]
+            codes = pd.to_numeric(df[cov], errors="coerce")
+            if codes.notna().any() and cov in labels:
+                shown = codes.map(labels[cov]).astype("object")
+            else:
+                shown = df[cov].astype("object")
+            shown = shown.where(shown.notna())
+
+            dummies = pd.get_dummies(shown, prefix=cov)
+            wanted = requested_reference.get(cov)
+            wanted_label = labels.get(cov, {}).get(wanted, wanted)
+            reference = (
+                f"{cov}_{wanted_label}"
+                if f"{cov}_{wanted_label}" in dummies.columns
+                else dummies.columns[0]
+            )
             dummies = dummies.drop(columns=[reference]).astype(float)
+            dummies[shown.isna()] = np.nan
             dummy_reference[cov] = reference.replace(f"{cov}_", "")
             for col in dummies.columns:
                 data[col] = dummies[col]

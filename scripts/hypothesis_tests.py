@@ -39,7 +39,14 @@ import pandas as pd
 import scipy.stats as stats
 import statsmodels.api as sm
 
-from common import OUTPUT_DIR, PROCESSED_DIR, build_model_frame, ensure_dirs, load_config
+from common import (
+    OUTPUT_DIR,
+    PROCESSED_DIR,
+    build_model_frame,
+    ensure_dirs,
+    level_labels,
+    load_config,
+)
 
 
 def fmt_p(p: float) -> str:
@@ -60,10 +67,7 @@ def cohens_d(group_a: pd.Series, group_b: pd.Series) -> tuple[float, float, floa
 def test_h1(df: pd.DataFrame, config: dict) -> list[str]:
     spec = config["analysis"]
     outcome, predictor = spec["outcome"], spec["predictor"]
-    labels = {
-        int(k): v
-        for k, v in ((config.get("derived") or {}).get(predictor, {}).get("levels") or {}).items()
-    }
+    labels = level_labels(config).get(predictor, {})
 
     data = df[[outcome, predictor]].apply(pd.to_numeric, errors="coerce").dropna()
     native = data.loc[data[predictor] == 0, outcome]
@@ -295,10 +299,7 @@ def plot_simple_slopes(payload: dict, info: dict, config: dict) -> None:
     predictor, moderator_col = info["predictor"], info["moderator_col"]
     interaction, outcome = info["interaction"], info["outcome"]
 
-    labels = {
-        int(k): v
-        for k, v in ((config.get("derived") or {}).get(predictor, {}).get("levels") or {}).items()
-    }
+    labels = level_labels(config).get(predictor, {})
     means = complete.mean()
 
     fig, ax = plt.subplots(figsize=(6.5, 4.5))

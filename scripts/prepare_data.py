@@ -28,31 +28,34 @@ from common import (
     FlowLog,
     all_scale_items,
     apply_derived,
+    apply_renames,
     coerce_numeric,
+    resolve_column,
     drop_identifying_columns,
     ensure_dirs,
     load_config,
-    read_qualtrics_csv,
+    read_export,
     score_scales,
 )
 
 
 def newest_raw_file() -> Path:
     candidates = sorted(
-        [p for p in RAW_DIR.glob("*.csv")] + [p for p in RAW_DIR.glob("*.tsv")],
+        [p for pattern in ("*.csv", "*.tsv", "*.sav") for p in RAW_DIR.glob(pattern)],
         key=lambda p: p.stat().st_mtime,
         reverse=True,
     )
     if not candidates:
         sys.exit(
             f"No export found in {RAW_DIR}/.\n"
-            "Run scripts/fetch_qualtrics.py, or drop a Qualtrics CSV export in there."
+            "Run scripts/fetch_qualtrics.py, or drop a Qualtrics CSV or SPSS .sav in there."
         )
     return candidates[0]
 
 
 def apply_screening(df: pd.DataFrame, config: dict) -> tuple[pd.DataFrame, FlowLog]:
-    cols = config["columns"]
+    cols = {k: (resolve_column(df, v) or v) for k, v in config["columns"].items()
+            if isinstance(v, str)}
     rules = config["screening"]
     flow = FlowLog()
 
@@ -68,9 +71,13 @@ def apply_screening(df: pd.DataFrame, config: dict) -> tuple[pd.DataFrame, FlowL
     if rules.get("drop_preview_responses") and channel in df.columns:
         step("Preview / test responses", df[channel].astype(str).str.lower() != "preview")
 
-    consent = rules.get("consent") or {}
-    if consent.get("column") in df.columns:
-        step("Did not give consent", df[consent["column"]] == consent["required_value"])
+    consent_column = resolve_column(df, (rules.get("consent") or {}).get("column"))
+    if consent_column:
+        step(
+            "Did not give consent",
+            pd.to_numeric(df[consent_column], errors="coerce")
+            == rules["consent"]["required_value"],
+        )
 
     finished = cols.get("finished")
     if rules.get("require_finished") and finished in df.columns:
@@ -84,8 +91,8 @@ def apply_screening(df: pd.DataFrame, config: dict) -> tuple[pd.DataFrame, FlowL
         )
 
     for rule in rules.get("eligibility") or []:
-        col = rule["column"]
-        if col not in df.columns:
+        col = resolve_column(df, rule["column"])
+        if col is None:
             continue
         values = pd.to_numeric(df[col], errors="coerce")
         mask = pd.Series(True, index=df.index)
@@ -112,10 +119,11 @@ def apply_screening(df: pd.DataFrame, config: dict) -> tuple[pd.DataFrame, FlowL
             )
 
     for rule in rules.get("categorical_eligibility") or []:
-        if not rule.get("enabled", True) or rule["column"] not in df.columns:
+        column = resolve_column(df, rule["column"])
+        if not rule.get("enabled", True) or column is None:
             continue
-        values = pd.to_numeric(df[rule["column"]], errors="coerce")
-        step(rule.get("label", f"Ineligible on {rule['column']}"), values.isin(rule["keep_values"]))
+        values = pd.to_numeric(df[column], errors="coerce")
+        step(rule.get("label", f"Ineligible on {column}"), values.isin(rule["keep_values"]))
 
     checks = rules.get("attention_checks") or []
     present = [c for c in checks if c["column"] in df.columns]
@@ -197,12 +205,17 @@ def write_reports(
         for name, rep in derived_report.items():
             if "error" in rep:
                 lines.append(f"- **{name}** ({rep['label']}): NOT BUILT — {rep['error']}")
-            else:
+            elif "counts" in rep:
                 counts = ", ".join(f"{k} = {v}" for k, v in sorted(rep["counts"].items(), key=str))
                 lines.append(
                     f"- **{name}** ({rep['label']}) recoded from `{rep['source']}`: {counts}"
                     + (f"; {rep['unmapped']} value(s) did not match the mapping"
                        if rep["unmapped"] else "")
+                )
+            else:
+                lines.append(
+                    f"- **{name}** ({rep['label']}) computed from `{rep['source']}` as "
+                    f"{rep['transform']}, giving {rep['range']}"
                 )
         lines.append("")
 
@@ -228,7 +241,7 @@ def main() -> None:
 
     source = args.input or newest_raw_file()
     print(f"Reading {source}")
-    df = read_qualtrics_csv(source)
+    df = read_export(source)
     print(f"  {len(df)} rows, {len(df.columns)} columns")
 
     df, dropped_cols = drop_identifying_columns(df, config)
@@ -244,9 +257,12 @@ def main() -> None:
     print(flow.to_frame().to_string(index=False))
 
     df, derived_report = apply_derived(df, config)
+    df, renamed = apply_renames(df, config)
+    if renamed:
+        print("  renamed: " + ", ".join(f"{k} -> {v}" for k, v in renamed.items()))
     df, scale_report = score_scales(df, config)
 
-    keep = [config["columns"]["response_id"]]
+    keep = [resolve_column(df, config["columns"]["response_id"]) or "ResponseId"]
     keep += config["demographics"]["continuous"] + config["demographics"]["categorical"]
     keep += list((config.get("derived") or {}).keys())
     keep += list(config["scales"].keys())
