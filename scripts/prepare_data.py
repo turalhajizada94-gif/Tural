@@ -27,6 +27,7 @@ from common import (
     RAW_DIR,
     FlowLog,
     all_scale_items,
+    apply_derived,
     coerce_numeric,
     drop_identifying_columns,
     ensure_dirs,
@@ -110,6 +111,12 @@ def apply_screening(df: pd.DataFrame, config: dict) -> tuple[pd.DataFrame, FlowL
                 seconds <= rules["max_duration_seconds"],
             )
 
+    for rule in rules.get("categorical_eligibility") or []:
+        if not rule.get("enabled", True) or rule["column"] not in df.columns:
+            continue
+        values = pd.to_numeric(df[rule["column"]], errors="coerce")
+        step(rule.get("label", f"Ineligible on {rule['column']}"), values.isin(rule["keep_values"]))
+
     checks = rules.get("attention_checks") or []
     present = [c for c in checks if c["column"] in df.columns]
     if present:
@@ -123,7 +130,13 @@ def apply_screening(df: pd.DataFrame, config: dict) -> tuple[pd.DataFrame, FlowL
     return df, flow
 
 
-def write_reports(flow: FlowLog, scale_report: dict, dropped_cols: list[str], source: Path) -> None:
+def write_reports(
+    flow: FlowLog,
+    scale_report: dict,
+    dropped_cols: list[str],
+    source: Path,
+    derived_report: dict | None = None,
+) -> None:
     flow_df = flow.to_frame()
     flow_df.to_csv(OUTPUT_DIR / "participant_flow.csv", index=False)
 
@@ -179,6 +192,20 @@ def write_reports(flow: FlowLog, scale_report: dict, dropped_cols: list[str], so
         report_df.to_markdown(index=False),
         "",
     ]
+    if derived_report:
+        lines += ["## Derived variables", ""]
+        for name, rep in derived_report.items():
+            if "error" in rep:
+                lines.append(f"- **{name}** ({rep['label']}): NOT BUILT — {rep['error']}")
+            else:
+                counts = ", ".join(f"{k} = {v}" for k, v in sorted(rep["counts"].items(), key=str))
+                lines.append(
+                    f"- **{name}** ({rep['label']}) recoded from `{rep['source']}`: {counts}"
+                    + (f"; {rep['unmapped']} value(s) did not match the mapping"
+                       if rep["unmapped"] else "")
+                )
+        lines.append("")
+
     if missing_note:
         lines += [
             "## Items listed in config but absent from the export",
@@ -216,10 +243,12 @@ def main() -> None:
     print("\nParticipant flow:")
     print(flow.to_frame().to_string(index=False))
 
+    df, derived_report = apply_derived(df, config)
     df, scale_report = score_scales(df, config)
 
     keep = [config["columns"]["response_id"]]
     keep += config["demographics"]["continuous"] + config["demographics"]["categorical"]
+    keep += list((config.get("derived") or {}).keys())
     keep += list(config["scales"].keys())
     keep += all_scale_items(config)
     keep = [c for c in dict.fromkeys(keep) if c in df.columns]
@@ -227,7 +256,7 @@ def main() -> None:
     out_path = PROCESSED_DIR / "analysis_sample.csv"
     df[keep].to_csv(out_path, index=False)
 
-    write_reports(flow, scale_report, dropped_cols, source)
+    write_reports(flow, scale_report, dropped_cols, source, derived_report)
 
     print(f"\nWrote {out_path} (N = {len(df)})")
     print(f"Wrote {OUTPUT_DIR / 'participant_flow.md'}")

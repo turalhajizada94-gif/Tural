@@ -46,6 +46,27 @@ def drop_identifying_columns(df: pd.DataFrame, config: dict) -> tuple[pd.DataFra
     return df.drop(columns=to_drop), to_drop
 
 
+def apply_derived(df: pd.DataFrame, config: dict) -> tuple[pd.DataFrame, dict]:
+    """Build recoded variables, e.g. ESL from 'Is English your first language?'."""
+    df = df.copy()
+    report: dict[str, dict] = {}
+    for name, spec in (config.get("derived") or {}).items():
+        source = spec["from"]
+        if source not in df.columns:
+            report[name] = {"label": spec.get("label", name), "error": f"{source} not in export"}
+            continue
+        mapping = {int(k): v for k, v in spec["mapping"].items()}
+        values = pd.to_numeric(df[source], errors="coerce")
+        df[name] = values.map(mapping)
+        report[name] = {
+            "label": spec.get("label", name),
+            "source": source,
+            "counts": df[name].value_counts(dropna=False).to_dict(),
+            "unmapped": int(values.notna().sum() - df[name].notna().sum()),
+        }
+    return df, report
+
+
 def coerce_numeric(df: pd.DataFrame, columns: list[str]) -> pd.DataFrame:
     df = df.copy()
     for col in columns:
@@ -157,6 +178,152 @@ class FlowLog:
                 f"excluded ({body}), leaving a final analysed sample of N = {final}."
             )
         return f"All {start} recorded responses were retained (N = {final})."
+
+
+def build_model_frame(df: pd.DataFrame, config: dict) -> tuple[pd.DataFrame, dict]:
+    """Assemble the regression design described in config['analysis'].
+
+    Handles the pre-registered specifics: the moderator is mean-centred,
+    categorical covariates become dummies against a named reference level, and
+    the predictor x moderator interaction is formed after centring.
+    """
+    spec = config["analysis"]
+    outcome = spec["outcome"]
+    predictor = spec.get("predictor")
+    moderator = spec.get("moderator")
+    categorical = set(config.get("demographics", {}).get("categorical") or [])
+
+    data = pd.DataFrame(index=df.index)
+    data[outcome] = pd.to_numeric(df[outcome], errors="coerce")
+    design: list[str] = []
+
+    if predictor:
+        data[predictor] = pd.to_numeric(df[predictor], errors="coerce")
+        design.append(predictor)
+
+    moderator_col = None
+    if moderator:
+        values = pd.to_numeric(df[moderator], errors="coerce")
+        if spec.get("centre_moderator"):
+            moderator_col = f"{moderator}_c"
+            data[moderator_col] = values - values.mean()
+        else:
+            moderator_col = moderator
+            data[moderator_col] = values
+        design.append(moderator_col)
+
+    dummy_reference: dict[str, str] = {}
+    for cov in spec.get("covariates") or []:
+        if cov not in df.columns:
+            continue
+        if cov in categorical or df[cov].dtype == object:
+            dummies = pd.get_dummies(df[cov].astype(str), prefix=cov)
+            wanted = f"{cov}_{spec.get('gender_reference')}" if cov == "Gender" else None
+            reference = wanted if wanted in dummies.columns else dummies.columns[0]
+            dummies = dummies.drop(columns=[reference]).astype(float)
+            dummy_reference[cov] = reference.replace(f"{cov}_", "")
+            for col in dummies.columns:
+                data[col] = dummies[col]
+                design.append(col)
+        else:
+            data[cov] = pd.to_numeric(df[cov], errors="coerce")
+            design.append(cov)
+
+    interaction = None
+    if predictor and moderator_col:
+        interaction = f"{predictor}_x_{moderator}"
+        data[interaction] = data[predictor] * data[moderator_col]
+
+    info = {
+        "outcome": outcome,
+        "predictor": predictor,
+        "moderator": moderator,
+        "moderator_col": moderator_col,
+        "interaction": interaction,
+        "design": design,
+        "dummy_reference": dummy_reference,
+        "continuous": [c for c in (outcome, predictor, moderator_col) if c],
+    }
+    return data, info
+
+
+def _em_multivariate_normal(
+    values: np.ndarray, max_iter: int = 500, tol: float = 1e-7
+) -> tuple[np.ndarray, np.ndarray]:
+    """ML estimates of mu and sigma under multivariate normality with missing data."""
+    n, p = values.shape
+    observed = ~np.isnan(values)
+    mu = np.nanmean(values, axis=0)
+    sigma = np.ma.cov(np.ma.masked_invalid(values), rowvar=False)
+    sigma = np.atleast_2d(np.asarray(sigma.filled(0) if hasattr(sigma, "filled") else sigma))
+    sigma = sigma + np.eye(p) * 1e-6
+
+    for _ in range(max_iter):
+        sum_x = np.zeros(p)
+        sum_xx = np.zeros((p, p))
+        for i in range(n):
+            obs = observed[i]
+            mis = ~obs
+            row = values[i].copy()
+            correction = np.zeros((p, p))
+            if mis.any():
+                if obs.any():
+                    s_oo = sigma[np.ix_(obs, obs)]
+                    s_mo = sigma[np.ix_(mis, obs)]
+                    inv = np.linalg.pinv(s_oo)
+                    row[mis] = mu[mis] + s_mo @ inv @ (row[obs] - mu[obs])
+                    correction[np.ix_(mis, mis)] = sigma[np.ix_(mis, mis)] - s_mo @ inv @ s_mo.T
+                else:
+                    row = mu.copy()
+                    correction = sigma.copy()
+            sum_x += row
+            sum_xx += np.outer(row, row) + correction
+
+        new_mu = sum_x / n
+        new_sigma = sum_xx / n - np.outer(new_mu, new_mu)
+        converged = np.max(np.abs(new_mu - mu)) < tol and np.max(np.abs(new_sigma - sigma)) < tol
+        mu, sigma = new_mu, new_sigma
+        if converged:
+            break
+    return mu, sigma
+
+
+def littles_mcar_test(data: pd.DataFrame) -> dict:
+    """Little's (1988) test of whether values are missing completely at random.
+
+    The pre-registered plan routes on this: listwise deletion if missingness is
+    under 5% and MCAR is not rejected, multiple imputation otherwise.
+    """
+    from scipy import stats as _stats
+
+    frame = data.apply(pd.to_numeric, errors="coerce")
+    if not frame.isna().any().any():
+        return {"n_patterns": 1, "statistic": 0.0, "df": 0, "p": None, "no_missing": True}
+
+    values = frame.to_numpy(dtype=float)
+    mu, sigma = _em_multivariate_normal(values)
+
+    keys = frame.notna().apply(lambda row: "".join("1" if v else "0" for v in row), axis=1)
+    statistic = 0.0
+    df_total = 0
+    for key, group in frame.groupby(keys):
+        obs = np.array([c == "1" for c in key])
+        if not obs.any():
+            continue
+        diff = group.to_numpy(dtype=float)[:, obs].mean(axis=0) - mu[obs]
+        inv = np.linalg.pinv(sigma[np.ix_(obs, obs)])
+        statistic += len(group) * float(diff @ inv @ diff)
+        df_total += int(obs.sum())
+
+    df_total -= frame.shape[1]
+    p = float(1 - _stats.chi2.cdf(statistic, df_total)) if df_total > 0 else float("nan")
+    return {
+        "n_patterns": int(keys.nunique()),
+        "statistic": statistic,
+        "df": df_total,
+        "p": p,
+        "no_missing": False,
+    }
 
 
 def ensure_dirs() -> None:

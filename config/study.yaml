@@ -1,23 +1,22 @@
 # ---------------------------------------------------------------------------
-# Study configuration — EDIT THIS FILE to match your own survey.
+# The Shield of Creativity: Openness Moderates the Impact of ESL Status on
+# Workplace Bullying
 #
-# Every script reads this file, so once the column names, scales and screening
-# rules here are correct, the participant flow, descriptives, reliabilities and
-# assumption tests all follow automatically.
+# Tural Hajizada (31843069) — PSY4414 A2, Journal Manuscript Milestone 3: Results
 #
-# The values below are a worked example sized to a 180-respondent survey. Replace
-# the scale names, item codes and rules with your own.
+# Configured from the PSY4412 pre-registration, ethics application and
+# Introduction milestone. Every script reads this file.
+#
+# >>> VERIFY THE COLUMN NAMES against your actual Qualtrics export before the
+# >>> first real run. prepare_data.py reports any item listed here that is
+# >>> missing from the export, so a mismatch is loud rather than silent.
 # ---------------------------------------------------------------------------
 
 qualtrics:
-  # Data centre id: read it off your Qualtrics URL, e.g. syd1.qualtrics.com -> syd1
   data_center: syd1
-  # Survey id from Survey -> Tools -> Survey ID, or the SV_... in the editor URL
   survey_id: SV_REPLACE_ME
 
 columns:
-  # Qualtrics metadata column names. These are the defaults; change only if you
-  # renamed them in the survey.
   response_id: ResponseId
   progress: Progress
   duration: Duration (in seconds)
@@ -25,7 +24,9 @@ columns:
   distribution_channel: DistributionChannel
   start_date: StartDate
 
-  # Identifying columns dropped on import and never written to disk.
+  # The ethics application states responses are anonymised. Your supervisor noted
+  # Qualtrics still records IP addresses and that these are deleted at the data
+  # cleaning stage — that deletion happens here.
   drop_on_import:
     - IPAddress
     - RecipientEmail
@@ -37,64 +38,107 @@ columns:
     - UserLanguage
 
 screening:
-  # Each rule below becomes one line of your participant flow.
-  drop_preview_responses: true      # DistributionChannel == "preview"
-  require_finished: true            # Finished == 1
-  min_progress: 100                 # percent
-  min_duration_seconds: 180         # speeders; set from your own pilot timing
-  max_duration_seconds: null        # e.g. 7200 to drop abandoned-then-resumed cases
+  drop_preview_responses: true
+  require_finished: true
+  min_progress: 100
+
+  # 10-15 minutes was the stated burden. 180 s is a conservative speeder floor;
+  # check it against your own Prolific completion times before committing to it.
+  min_duration_seconds: 180
+  max_duration_seconds: null
 
   consent:
     column: Consent
     required_value: 1
 
   eligibility:
+    # Ethics application: adults aged 25 years or older.
     - column: Age
-      min: 18
+      min: 25
       max: null
 
+  # Two attention checks were pre-registered ("Please select 'Somewhat agree'...").
+  # Set correct_value to the numeric code your survey records.
   attention_checks:
     - column: AC1
-      correct_value: 4
+      correct_value: 5
+    - column: AC2
+      correct_value: 5
   max_attention_check_failures: 0
 
-  # A participant is dropped from a scale if more than this proportion of its
-  # items are missing; at or below it, the remaining items are averaged.
+  # Categorical eligibility, e.g. employment status. Your supervisor's feedback on
+  # the ethics application was "We will be focused on full-time only", which
+  # conflicts with the pre-registration's "full-time or part-time". Confirm which
+  # applies, then set keep_values to the codes you retain.
+  categorical_eligibility:
+    - column: Employment
+      label: Not employed full-time
+      keep_values: [1]
+      enabled: false
+
   max_missing_proportion_per_scale: 0.20
 
 scales:
-  stress:
-    label: Perceived Stress
-    items: [PSS1, PSS2, PSS3, PSS4, PSS5, PSS6]
-    reverse_items: [PSS4, PSS5]
-    response_range: [1, 5]
-    score: mean
-
-  coping:
-    label: Adaptive Coping
-    items: [COP1, COP2, COP3, COP4, COP5]
+  bullying:
+    label: Workplace Bullying (NAQ-R)
+    # Negative Acts Questionnaire-Revised, 22 items, 1 = Never to 5 = Daily,
+    # referring to the last six months (Einarsen et al., 2009).
+    items: [NAQ1, NAQ2, NAQ3, NAQ4, NAQ5, NAQ6, NAQ7, NAQ8, NAQ9, NAQ10, NAQ11,
+            NAQ12, NAQ13, NAQ14, NAQ15, NAQ16, NAQ17, NAQ18, NAQ19, NAQ20, NAQ21,
+            NAQ22]
     reverse_items: []
+    response_range: [1, 5]
+    # The pre-registration specifies the NAQ-R SUM score as the outcome.
+    score: sum
+
+  openness:
+    label: Openness to Experience (Mini-IPIP6)
+    # Mini-IPIP6 Openness subscale, 4 items, 7-point Likert (Sibley, 2012).
+    items: [OPEN1, OPEN2, OPEN3, OPEN4]
+    # VERIFY: in the standard Mini-IPIP6 Openness subscale three of the four
+    # items are negatively keyed. Confirm against the version in your survey.
+    reverse_items: [OPEN2, OPEN3, OPEN4]
     response_range: [1, 7]
     score: mean
 
-  wellbeing:
-    label: Psychological Wellbeing
-    items: [WB1, WB2, WB3, WB4, WB5, WB6, WB7, WB8]
-    reverse_items: [WB3, WB7]
-    response_range: [1, 7]
-    score: mean
+derived:
+  # The survey asks "Is English your first language?" (Yes/No). The predictor is
+  # dummy coded 0 = native English speaker, 1 = ESL, per the pre-registration.
+  ESL:
+    from: EnglishFirstLanguage
+    label: ESL status
+    # VERIFY the numeric codes Qualtrics assigns to Yes and No.
+    mapping:
+      1: 0    # Yes, English is my first language -> native speaker
+      2: 1    # No -> ESL
+    levels:
+      0: Native English speaker
+      1: ESL speaker
 
 demographics:
-  # Reported in the sample description; continuous vars also usable as covariates.
   continuous: [Age]
-  categorical: [Gender, Education]
+  categorical: [Gender, ESL]
 
 analysis:
-  # Drives which assumption tests are run. Set model to one of:
-  #   correlation | regression | mediation | moderation
-  model: mediation
-  outcome: wellbeing
-  predictors: [stress]
-  mediator: coping
-  moderator: null
-  covariates: [Age]
+  model: moderation
+  outcome: bullying
+  predictor: ESL
+  moderator: openness
+  covariates: [Gender]
+
+  # Pre-registered: Openness mean-centred, interaction ESL x Openness, simple
+  # slopes probed at -1 SD, the mean, and +1 SD.
+  centre_moderator: true
+  simple_slopes_sd: [-1, 0, 1]
+
+  # Gender is categorical; this level is the regression reference category.
+  gender_reference: Male
+
+thresholds:
+  # Taken from the pre-registered analysis plan rather than generic defaults.
+  vif_max: 4.0                    # pre-registration specifies VIF < 4
+  standardised_skew_kurtosis: 1.96  # pre-registration: standardised value +/- 1.96
+  mahalanobis_p: 0.001
+  cooks_distance_max: 1.0
+  mcar_alpha: 0.05                # < 5% missing on Little's MCAR -> listwise deletion
+  alpha_floor: 0.70
