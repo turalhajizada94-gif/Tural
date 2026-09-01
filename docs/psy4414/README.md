@@ -8,6 +8,7 @@ including the final manuscript.
 
 | Document | What it covers |
 | --- | --- |
+| [The study and its analysis plan](study-analysis-plan.md) | Your design, hypotheses and pre-registered analysis, plus five things to settle with your supervisor |
 | [Results section requirements](results-section-requirements.md) | **Authoritative.** Consolidated from the rubric, submission guidelines and FAQ |
 | [Qualtrics export guide](qualtrics-export-guide.md) | How to move survey data out of Qualtrics, and which variables are required |
 | [Assessment 1 — Research Portfolio](assessment-1-research-portfolio.md) | The no-submission portfolio item and how it is graded |

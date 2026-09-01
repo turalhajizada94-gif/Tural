@@ -1,7 +1,10 @@
 # Tural
 
-PSY4414 research project: assessment notes and the analysis pipeline for the
-quantitative results section.
+PSY4414 research project — *The Shield of Creativity: Openness Moderates the
+Impact of ESL Status on Workplace Bullying*.
+
+Assessment notes and the analysis pipeline for the quantitative results section,
+configured from the PSY4412 pre-registration and ethics application.
 
 > **This repository is public.** Participant data must never be committed to it.
 > `.gitignore` blocks `data/`, `output/` and all spreadsheet formats by default.
@@ -25,6 +28,9 @@ python scripts/prepare_data.py
 
 # 4. descriptives, reliabilities, correlations, assumption tests
 python scripts/analyse.py
+
+# 5. H1 (t-test) and H2 (moderation with simple slopes)
+python scripts/hypothesis_tests.py
 ```
 
 No data yet? `python scripts/make_synthetic_data.py --n-final 180` writes a fake
@@ -38,13 +44,15 @@ export so you can watch the whole workflow run.
 | `scripts/fetch_qualtrics.py` | Downloads responses via the Qualtrics API |
 | `scripts/prepare_data.py` | Screening, participant flow, reverse scoring, composites |
 | `scripts/analyse.py` | Descriptives, Cronbach's alpha, intercorrelations, assumption tests, figures |
+| `scripts/hypothesis_tests.py` | H1 independent samples t-test; H2 hierarchical moderation with simple slopes |
 | `scripts/make_synthetic_data.py` | Fake export for testing the pipeline safely |
 | `data/` | Local only, git-ignored |
 | `output/` | Generated reports and figures, git-ignored |
 
 ## Documentation
 
-- [Results section requirements](docs/psy4414/results-section-requirements.md) — start here; consolidated from the rubric, submission guidelines and FAQ
+- [The study and its analysis plan](docs/psy4414/study-analysis-plan.md) — start here; design, hypotheses, and open questions for your supervisor
+- [Results section requirements](docs/psy4414/results-section-requirements.md) — consolidated from the rubric, submission guidelines and FAQ
 - [Getting your Qualtrics data out, and which data you need](docs/psy4414/qualtrics-export-guide.md)
 - [Assessment 2 — Results Section](docs/psy4414/assessment-2-results-section.md)
 - [Results section checklist](docs/psy4414/results-section-checklist.md)
